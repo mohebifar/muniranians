@@ -1,13 +1,19 @@
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Default Starter`,
+    title: `MUNIranians`,
   },
   plugins: [
     `gatsby-plugin-react-helmet`,
     {
       resolve: `gatsby-source-firebase`,
       options: {
-        credential: require(process.env.FIREBASE_PRIVATE_KEY_FILE || './firebase-key.json'),
+        credential: process.env.FIREBASE_PRIVATE_KEY_FILE
+          ? require(process.env.FIREBASE_PRIVATE_KEY_FILE)
+          : {
+            projectId: process.env.FIREBASE_PROJECT_ID,
+            clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+            privateKey: JSON.parse(`"${process.env.FIREBASE_PRIVATE_KEY}"`),
+          },
         databaseURL: process.env.FIREBASE_DATABASE_URL,
         types: [
           {

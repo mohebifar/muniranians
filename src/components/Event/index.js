@@ -98,7 +98,6 @@ class EventPage extends Component {
 
   render() {
     const { eventId, event } = this.props
-    console.log(this.props)
 
     return (
       <div>
