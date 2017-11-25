@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Link from 'gatsby-link'
 import Helmet from 'react-helmet'
 
 import Header from '../components/Header'
@@ -13,8 +12,16 @@ const TemplateWrapper = ({ children }) => (
     <Helmet
       title="MUNIranians - The Iranian Student Society of Memorial University"
       meta={[
-        { name: 'description', content: 'Sample' },
-        { name: 'keywords', content: 'sample, something' },
+        {
+          name: 'description',
+          content:
+            'MUNIranians is an independent, cultural and social student club which continues voluntarily since 2010.',
+        },
+        {
+          name: 'keywords',
+          content:
+            'persian, culture, events, newfoundland, memorial, mun, muniranians',
+        },
       ]}
     />
     <Header />

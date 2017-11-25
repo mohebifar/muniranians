@@ -1,16 +1,13 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import Link from 'gatsby-link'
-import Helmet from 'react-helmet'
 import styled from 'styled-components'
 
 import { compose, withProps, branch } from 'recompose'
 import { connect } from 'react-redux'
 import {
   firebaseConnect,
-  populatedDataToJS,
   pathToJS,
-  dataToJS,
   isLoaded,
   isEmpty,
 } from 'react-redux-firebase'
@@ -95,7 +92,7 @@ class Header extends Component {
   }
 
   toggleDropDown = () => {
-    this.setState(state => ({ isOpen: !state.isOpen }))
+    this.setState(state => {return { isOpen: !state.isOpen }})
   }
 
   render() {
@@ -136,24 +133,32 @@ class Header extends Component {
 }
 
 Header.propTypes = {
-  children: PropTypes.func,
+  children: PropTypes.node,
+  isAuthenticated: PropTypes.bool,
+  firebase: PropTypes.shape({
+    logout: PropTypes.func.isRequired,
+  }),
+  auth: PropTypes.shape({
+    displayName: PropTypes.string,
+    photoURL: PropTypes.string,
+  }),
 }
 
 export default compose(
-  connect(({ firebase }) => ({
+  connect(({ firebase }) => {return {
     auth: pathToJS(firebase, 'auth'),
     account: pathToJS(firebase, 'profile'),
-  })),
+  }}),
   branch(
     () => !__SERVER__,
     compose(
       firebaseConnect(),
-      withProps(props => ({
+      withProps(props => {return {
         isAuthenticated: isLoaded(props.auth) && !isEmpty(props.auth),
-      }))
+      }})
     ),
-    withProps(() => ({
+    withProps(() => {return {
       firebase: {},
-    }))
+    }})
   )
 )(Header)

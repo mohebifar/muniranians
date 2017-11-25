@@ -31,7 +31,7 @@ const Button = styled.a`
   display: inline-block;
 `
 
-const Testimonial = ({ photo, text, name, position }) => (
+const HelpBanner = () => (
   <Wrapper>
     <h3>
       Do you know{' '}
@@ -53,4 +53,4 @@ const Testimonial = ({ photo, text, name, position }) => (
   </Wrapper>
 )
 
-export default Testimonial
+export default HelpBanner

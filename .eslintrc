@@ -1,0 +1,58 @@
+{
+  "parser": "babel-eslint",
+  "extends": [
+    "google",
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "prettier",
+    "prettier/react"
+  ],
+  "plugins": ["react"],
+  "parserOptions": {
+    "ecmaVersion": 2016,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "env": {
+    "es6": true,
+    "node": true,
+    "jest": true,
+    "browser": true
+  },
+  "globals": {
+    "__SERVER__": false
+  },
+  "rules": {
+    "no-console": "off",
+    "valid-jsdoc": "off",
+    "require-jsdoc": "off",
+    "quotes": ["error", "single"],
+    "consistent-return": ["error"],
+    "arrow-body-style": [
+      "error",
+      "as-needed",
+      { "requireReturnForObjectLiteral": true }
+    ],
+    "jsx-quotes": ["error", "prefer-double"],
+    "semi": ["error", "never"],
+    "object-curly-spacing": ["error", "always"],
+    "comma-dangle": [
+      "error",
+      {
+        "arrays": "always-multiline",
+        "objects": "always-multiline",
+        "imports": "always-multiline",
+        "exports": "always-multiline",
+        "functions": "ignore"
+      }
+    ],
+    "react/prop-types": [
+      "error",
+      {
+        "ignore": ["children"]
+      }
+    ]
+  }
+}

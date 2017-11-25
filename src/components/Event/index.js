@@ -1,24 +1,14 @@
 import React, { Component } from 'react'
-import Link from 'gatsby-link'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { branch, compose, withProps } from 'recompose'
+import Helmet from 'react-helmet'
+import { branch, compose, mapProps } from 'recompose'
 import { connect } from 'react-redux'
-import {
-  firebaseConnect,
-  isLoaded,
-  isEmpty,
-  dataToJS,
-  pathToJS,
-} from 'react-redux-firebase'
-import qs from 'qs'
+import { firebaseConnect, dataToJS } from 'react-redux-firebase'
 import _ from 'lodash'
 import 'whatwg-fetch'
 
 import { Container, Flex, Box, Panel } from '../Layout'
-import Testimonial from '../Testimonial'
-import AboutSection from '../AboutSection'
-import UpcomingEvents from '../UpcomingEvents'
-import HelpBanner from '../HelpBanner'
 import Ticket from '../Ticket'
 
 import config from '../../config'
@@ -68,6 +58,11 @@ const Description = styled.div`
 `
 
 class EventPage extends Component {
+  static propTypes = {
+    event: PropTypes.object.isRequired,
+    eventId: PropTypes.string.isRequired,
+  }
+
   state = {
     buying: null,
   }
@@ -101,6 +96,12 @@ class EventPage extends Component {
 
     return (
       <div>
+        <Helmet
+          title={`${event.name} - MUNIranians`}
+          meta={[
+            { name: 'description', content: event.description },
+          ]}
+        />
         <Jumbotron>
           <h1>{event.name}</h1>
           <h2 className="farsi">{event.faName}</h2>
@@ -122,7 +123,7 @@ class EventPage extends Component {
                   <MapIFrame
                     src={`https://www.google.com/maps/embed/v1/view?zoom=17&center=${
                       event.location.lat
-                    },${event.location.lon}&key=${config.googleMaps.apiKey}`}
+                      },${event.location.lon}&key=${config.googleMaps.apiKey}`}
                     frameBorder="0"
                     allowFullScreen
                   />
@@ -169,9 +170,17 @@ export default compose(
           storeAs: 'event',
         },
       ]),
-      connect(state => ({
-        event: dataToJS(state.firebase, 'event') || {},
-      }))
+      connect(state => {
+        return {
+          eventRedux: dataToJS(state.firebase, 'event') || {},
+        }
+      })
     )
-  )
+  ),
+  mapProps(props => {
+    return {
+      event: !_.isEmpty(props.eventRedux) ? props.eventRedux : props.preloadedEvent,
+      eventId: props.eventId,
+    }
+  })
 )(EventPage)

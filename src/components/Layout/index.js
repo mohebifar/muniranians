@@ -13,7 +13,7 @@ export const Container = styled.div`
     props.flex
       ? `display: flex; flex-direction: ${props.flex};`
       : null} ${props =>
-      props.fluid ? null : `max-width: 960px; margin: auto;`};
+      props.fluid ? null : 'max-width: 960px; margin: auto;'};
 `
 
 export const Row = styled.div`

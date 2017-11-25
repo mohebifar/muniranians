@@ -1,22 +1,12 @@
 import React from 'react'
-import Link from 'gatsby-link'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { compose, withProps } from 'recompose'
-import { connect } from 'react-redux'
-import {
-  firebaseConnect,
-  isLoaded,
-  isEmpty,
-  dataToJS,
-  pathToJS,
-} from 'react-redux-firebase'
 
 import { Container, Flex, Box } from '../components/Layout'
 import Testimonial from '../components/Testimonial'
 import AboutSection from '../components/AboutSection'
 import UpcomingEvents from '../components/UpcomingEvents'
 import HelpBanner from '../components/HelpBanner'
-import { ifClient } from '../hoc'
 
 const Jumbotron = styled.div`
   background-color: #44c3ac;
@@ -41,7 +31,7 @@ const testimonials = [
     name: 'Mohamad',
     position: 'Chemistry Student at MUN',
     text:
-      "I have joined MUN Iranian not too long ago. Durning my membership, I was able to reunite with Persian culture and find great friends. They accommodate professional and favorable Persian events that I think is beyond the capacity of a volunteer-based student society. I am appreciative of the contributors' endeavors, and I hope they always keep up the excellent work.",
+      'I have joined MUN Iranian not too long ago. Durning my membership, I was able to reunite with Persian culture and find great friends. They accommodate professional and favorable Persian events that I think is beyond the capacity of a volunteer-based student society. I am appreciative of the contributors\' endeavors, and I hope they always keep up the excellent work.',
     photo:
       'https://pbs.twimg.com/profile_images/850830563695046656/0j9F2FV0_400x400.jpg',
   },
@@ -57,7 +47,7 @@ const testimonials = [
     name: 'Mehran',
     position: 'Ph.D. Student Mechanical Engineering',
     text:
-      "As a Graduate Researcher in Mechanical Engineering Programs, I have found The engineering faculty logically big, so you'll find a variety of people, and it is perfect regarding the overall education. Central Campus is lovely on the outside, but it still has a way to go to improve campus life for international students.",
+      'As a Graduate Researcher in Mechanical Engineering Programs, I have found The engineering faculty logically big, so you\'ll find a variety of people, and it is perfect regarding the overall education. Central Campus is lovely on the outside, but it still has a way to go to improve campus life for international students.',
     photo: require('../images/mehran.jpg'),
   },
 ]
@@ -107,5 +97,16 @@ const IndexPage = ({ pathContext: { events } }) => (
     </Container>
   </div>
 )
+
+IndexPage.propTypes = {
+  pathContext: PropTypes.shape({
+    events: PropTypes.arrayOf(PropTypes.shape({
+      name: PropTypes.string,
+      id: PropTypes.string,
+      startsAt: PropTypes.any,
+      endsAt: PropTypes.any,
+    })),
+  }),
+}
 
 export default IndexPage

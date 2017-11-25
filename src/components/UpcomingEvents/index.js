@@ -5,8 +5,6 @@ import styled from 'styled-components'
 import Icon from 'react-fontawesome'
 import moment from 'moment-timezone'
 
-import { Container } from '../Layout'
-
 const Wrapper = styled.div`
   overflow: hidden;
   margin: 4px 0;

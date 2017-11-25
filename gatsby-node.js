@@ -1,13 +1,13 @@
 const path = require('path')
 // HACK!
-let gql;
+let gql
 
 exports.createPages = ({ boundActionCreators, graphql }) => {
   gql = graphql
   const { createPage } = boundActionCreators
 
   return new Promise((resolve, reject) => {
-    const eventPageTemplate = path.resolve(`src/templates/event.js`)
+    const eventPageTemplate = path.resolve('src/templates/event.js')
     // Query for markdown nodes to use in creating pages.
     resolve(
       graphql(
@@ -29,6 +29,9 @@ exports.createPages = ({ boundActionCreators, graphql }) => {
                 
                 tickets {
                   name
+                  faName
+                  subtitle
+                  faSubtitle
                   quantity
                   price
                 }
@@ -44,14 +47,14 @@ exports.createPages = ({ boundActionCreators, graphql }) => {
 
         // Create pages for each markdown file.
         result.data.allEvent.edges.forEach(({ node }) => {
-          const path = `/events/${node.id}`;
+          const path = `/events/${node.id}`
           createPage({
             path,
             component: eventPageTemplate,
             context: {
               eventId: node.id,
-              event: node
-            }
+              preloadedEvent: node,
+            },
           })
         })
       })
@@ -92,8 +95,8 @@ exports.onCreatePage = ({ page, boundActionCreators, graphql }) => {
         const newPage = {
           ...page,
           context: {
-            events: result.data.allEvent.edges
-          }
+            events: result.data.allEvent.edges,
+          },
         }
 
         deletePage(page)

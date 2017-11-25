@@ -1,14 +1,12 @@
 import React from 'react'
-import Link from 'gatsby-link'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { branch, compose, withProps } from 'recompose'
+import { branch, compose } from 'recompose'
 import { connect } from 'react-redux'
 import { firebaseConnect, pathToJS } from 'react-redux-firebase'
 import Icon from 'react-fontawesome'
 
-import { Container, Flex, Box, Panel } from '../components/Layout'
-
-import config from '../config'
+import { Container, Box } from '../components/Layout'
 
 const Wrapper = styled.div`
   min-height: calc(100vh - 130px);
@@ -16,7 +14,7 @@ const Wrapper = styled.div`
   flex-direction: column;
 `
 
-const ContentWrapper = styled(Container)`
+const ContentWrapper = styled(Container) `
   flex-grow: 1;
   justify-content: center;
   align-items: center;
@@ -43,8 +41,7 @@ const LoginPage = ({ firebase }) => (
       <ContentWrapper>
         <Box p={2}>
           <p>
-            By logging in to the MUNIranians system, you'll get up to $5
-            discount on any event tickets!
+            {'By logging in to the MUNIranians system, you\'ll get up to $5 discount on any event tickets!'}
           </p>
         </Box>
         <FacebookButton
@@ -66,14 +63,20 @@ const LoginPage = ({ firebase }) => (
   </Wrapper>
 )
 
+LoginPage.propTypes = {
+  firebase: PropTypes.object,
+}
+
 export default branch(
   () => !__SERVER__,
   compose(
-    connect(({ firebase }) => ({
-      authError: pathToJS(firebase, 'authError'),
-      auth: pathToJS(firebase, 'auth'),
-      profile: pathToJS(firebase, 'profile'),
-    })),
+    connect(({ firebase }) => {
+      return {
+        authError: pathToJS(firebase, 'authError'),
+        auth: pathToJS(firebase, 'auth'),
+        profile: pathToJS(firebase, 'profile'),
+      }
+    }),
     firebaseConnect()
   )
 )(LoginPage)

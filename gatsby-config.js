@@ -1,11 +1,11 @@
 module.exports = {
   siteMetadata: {
-    title: `MUNIranians`,
+    title: 'MUNIranians',
   },
   plugins: [
-    `gatsby-plugin-react-helmet`,
+    'gatsby-plugin-react-helmet',
     {
-      resolve: `gatsby-source-firebase`,
+      resolve: 'gatsby-source-firebase',
       options: {
         credential: process.env.FIREBASE_PRIVATE_KEY_FILE
           ? require(process.env.FIREBASE_PRIVATE_KEY_FILE)
@@ -17,14 +17,14 @@ module.exports = {
         databaseURL: process.env.GATSBY_FIREBASE_DATABASE_URL,
         types: [
           {
-            type: "Event",
-            path: "events",
+            type: 'Event',
+            path: 'events',
           },
-        ]
-      }
+        ],
+      },
     },
     {
-      resolve: `gatsby-plugin-favicon`,
+      resolve: 'gatsby-plugin-favicon',
       options: {
         logo: './src/favicon.png',
         icons: {
@@ -36,14 +36,14 @@ module.exports = {
           firefox: true,
           twitter: false,
           yandex: false,
-          windows: false
-        }
-      }
+          windows: false,
+        },
+      },
     },
     {
-      resolve: `gatsby-plugin-google-analytics`,
+      resolve: 'gatsby-plugin-google-analytics',
       options: {
-        trackingId: process.env.GATSBY_GOOGLE_ANALYTICS_TRACKING_ID
+        trackingId: process.env.GATSBY_GOOGLE_ANALYTICS_TRACKING_ID,
       },
     },
   ],

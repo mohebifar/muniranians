@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import LaddaButton, { XS, ZOOM_OUT } from 'react-ladda'
 
@@ -74,7 +75,7 @@ const Wrapper = styled.div`
     box-shadow: 0 1px 0 0 #fff, 0 -1px 0 0 #fff;
     &:before,
     &:after {
-      content: '';
+      content: "";
       position: absolute;
       width: 20px;
       height: 20px;
@@ -155,5 +156,18 @@ const Ticket = ({
     </Flex>
   </Wrapper>
 )
+
+Ticket.propTypes = {
+  image: PropTypes.string,
+  quantity: PropTypes.number,
+  defaultImage: PropTypes.string,
+  subtitle: PropTypes.string,
+  faSubtitle: PropTypes.string,
+  title: PropTypes.string,
+  faTitle: PropTypes.string,
+  price: PropTypes.number,
+  onBuyTicket: PropTypes.func,
+  loading: PropTypes.bool,
+}
 
 export default Ticket

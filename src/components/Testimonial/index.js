@@ -1,10 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Link from 'gatsby-link'
-import Helmet from 'react-helmet'
 import styled from 'styled-components'
-
-import { Container } from '../Layout'
 
 const Wrapper = styled.div`
   box-shadow: 0 10px 20px 0 rgba(11, 15, 21, 0.1);

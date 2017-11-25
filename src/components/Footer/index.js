@@ -1,9 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import Link from 'gatsby-link'
 import styled from 'styled-components'
-import Icon from 'react-fontawesome'
-import moment from 'moment-timezone'
 
 import { Container } from '../Layout'
 
@@ -23,7 +19,7 @@ const Wrapper = styled(Container)`
   }
 `
 
-const UpcomingEvents = ({ title, description, start, end, location }) => (
+const Footer = () => (
   <Wrapper fluid>
     Designed and implemented by{' '}
     <a href="https://twitter.com/mohebifar">@mohebifar</a>
@@ -34,12 +30,4 @@ const UpcomingEvents = ({ title, description, start, end, location }) => (
   </Wrapper>
 )
 
-UpcomingEvents.propTypes = {
-  start: PropTypes.object,
-  env: PropTypes.object,
-  title: PropTypes.string,
-  description: PropTypes.string,
-  location: PropTypes.string,
-}
-
-export default UpcomingEvents
+export default Footer

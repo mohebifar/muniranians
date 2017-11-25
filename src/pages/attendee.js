@@ -1,15 +1,9 @@
 import React from 'react'
-import Link from 'gatsby-link'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { branch, compose, withProps } from 'recompose'
 import { connect } from 'react-redux'
-import {
-  firebaseConnect,
-  isLoaded,
-  isEmpty,
-  dataToJS,
-  pathToJS,
-} from 'react-redux-firebase'
+import { firebaseConnect, dataToJS } from 'react-redux-firebase'
 import qs from 'qs'
 import _ from 'lodash'
 import 'whatwg-fetch'
@@ -17,11 +11,6 @@ import QRCode from 'qrcode.react'
 import Icon from 'react-fontawesome'
 
 import { Container, Flex, Box, Panel } from '../components/Layout'
-import Testimonial from '../components/Testimonial'
-import AboutSection from '../components/AboutSection'
-import UpcomingEvents from '../components/UpcomingEvents'
-import HelpBanner from '../components/HelpBanner'
-import Ticket from '../components/Ticket'
 import loadingHOC from '../components/LoadingHOC'
 
 import config from '../config'
@@ -55,12 +44,6 @@ const MapIFrame = styled.iframe`
 const Address = styled.p`
   font-size: 0.8em;
   margin-bottom: 10px;
-`
-
-const TicketArea = styled.div`
-  background-image: linear-gradient(-45deg, #8067b7, #ec87c0);
-  padding: 50px 0;
-  margin-top: 50px;
 `
 
 const Description = styled.div`
@@ -141,10 +124,24 @@ const AttendeePage = ({ attendeeId, attendee, event }) => (
   </div>
 )
 
+AttendeePage.propTypes = {
+  attendeeId: PropTypes.string,
+  attendee: PropTypes.object,
+  event: PropTypes.shape({
+    name: PropTypes.string,
+    faName: PropTypes.string,
+    location: PropTypes.shape({
+      lat: PropTypes.number,
+      lon: PropTypes.number,
+      address: PropTypes.string,
+    }),
+  }),
+}
+
 export default compose(
-  withProps(props => ({
+  withProps(props => {return {
     attendeeId: qs.parse(props.location.search.replace(/^\?/, '')).id,
-  })),
+  }}),
   branch(
     () => !__SERVER__,
     firebaseConnect(props => [
@@ -154,9 +151,9 @@ export default compose(
       },
     ])
   ),
-  connect(state => ({
+  connect(state => {return {
     attendee: dataToJS(state.firebase, 'attendee') || {},
-  })),
+  }}),
   branch(
     () => !__SERVER__,
     firebaseConnect(props => [
@@ -167,7 +164,7 @@ export default compose(
     ])
   ),
   loadingHOC(props => props.attendee),
-  connect(state => ({
+  connect(state => {return {
     event: dataToJS(state.firebase, 'event') || {},
-  }))
+  }})
 )(AttendeePage)

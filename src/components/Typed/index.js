@@ -1,27 +1,31 @@
 import React, { Component } from 'react'
-// import { init, destroy } from 'ityped';
+import PropTypes from 'prop-types'
 
 class Typed extends Component {
+  static propTypes = {
+    strings: PropTypes.arrayOf(PropTypes.string).isRequired,
+  }
+
   componentDidMount() {
     const { strings } = this.props
 
     const options = {
       // required - for now, only accepting texts
       strings,
-      //optional
-      typeSpeed: 55, //default
-      //optional
-      backSpeed: 45, //default
-      //optional
-      startDelay: 500, //default
-      //optional
-      backDelay: 500, //default
-      //optional
-      loop: true, //default
-      //optional
-      showCursor: true, //default
-      //optional
-      cursorChar: '|', //default
+      // optional
+      typeSpeed: 55, // default
+      // optional
+      backSpeed: 45, // default
+      // optional
+      startDelay: 500, // default
+      // optional
+      backDelay: 500, // default
+      // optional
+      loop: true, // default
+      // optional
+      showCursor: true, // default
+      // optional
+      cursorChar: '|', // default
     }
 
     // this.el refers to the <span> in the render() method
