@@ -103,6 +103,13 @@ const Wrapper = styled.div`
   .-bold {
     font-weight: bold;
   }
+  .actualPrice {
+    font-weight: 600;
+    text-decoration: line-through;
+    display: inline-block;
+    padding-right: 9px;
+    font-size: 0.9em;
+  }
 `
 
 const Ticket = ({
@@ -114,48 +121,56 @@ const Ticket = ({
   title,
   faTitle,
   price,
+  actualPrice,
   onBuyTicket,
   loading,
 }) => (
-  <Wrapper>
-    <Flex flexDirection="column" className="top">
-      <div className="bandname -bold">{title}</div>
-      <div className="tourname farsi">{faTitle}</div>
-      <div
-        className="image"
-        style={{ backgroundImage: `url(${image || defaultImage})` }}
-      />
-      <Flex flexDirection="row" className="deetz">
-        <Flex flexDirection="column" className="event">
-          <div>{subtitle}</div>
-          <div className="farsi">{faSubtitle}</div>
-        </Flex>
-        <Flex flexDirection="column" className="price">
-          <div className="label">{price === 0 ? null : 'Price'}</div>
-          <div className="cost -bold">{price > 0 ? `$${price}` : 'FREE'}</div>
+    <Wrapper>
+      <Flex flexDirection="column" className="top">
+        <div className="bandname -bold">{title}</div>
+        <div className="tourname farsi">{faTitle}</div>
+        <div
+          className="image"
+          style={{ backgroundImage: `url(${image || defaultImage})` }}
+        />
+        <Flex flexDirection="row" className="deetz">
+          <Flex flexDirection="column" className="event">
+            <div>{subtitle}</div>
+            <div className="farsi">{faSubtitle}</div>
+          </Flex>
+          <Flex flexDirection="column" className="price">
+            <div className="label">{price === 0 ? null : 'Price'}</div>
+            <div className="cost">
+              {
+                actualPrice !== price
+                  ? <span className="actualPrice">${actualPrice}</span>
+                  : null
+              }
+              <span className="-bold">{price > 0 ? `$${price}` : 'FREE'}</span>
+            </div>
+          </Flex>
         </Flex>
       </Flex>
-    </Flex>
-    <div className="rip" />
-    <Flex flexDirection="row" className="bottom">
-      <div className="barcode" />
+      <div className="rip" />
+      <Flex flexDirection="row" className="bottom">
+        <div className="barcode" />
 
-      {quantity > 0 ? (
-        <LaddaButton
-          loading={loading}
-          onClick={onBuyTicket}
-          data-color="blue"
-          data-size={XS}
-          data-style={ZOOM_OUT}
-        >
-          BUY TICKET
+        {quantity > 0 ? (
+          <LaddaButton
+            loading={loading}
+            onClick={onBuyTicket}
+            data-color="blue"
+            data-size={XS}
+            data-style={ZOOM_OUT}
+          >
+            BUY TICKET
         </LaddaButton>
-      ) : (
-        <div className="sold-out">SOLD OUT</div>
-      )}
-    </Flex>
-  </Wrapper>
-)
+        ) : (
+            <div className="sold-out">SOLD OUT</div>
+          )}
+      </Flex>
+    </Wrapper>
+  )
 
 Ticket.propTypes = {
   image: PropTypes.string,
@@ -166,6 +181,7 @@ Ticket.propTypes = {
   title: PropTypes.string,
   faTitle: PropTypes.string,
   price: PropTypes.number,
+  actualPrice: PropTypes.number,
   onBuyTicket: PropTypes.func,
   loading: PropTypes.bool,
 }

@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import Helmet from 'react-helmet'
 import { branch, compose, mapProps } from 'recompose'
 import { connect } from 'react-redux'
-import { firebaseConnect, dataToJS } from 'react-redux-firebase'
+import { firebaseConnect, dataToJS, pathToJS } from 'react-redux-firebase'
 import _ from 'lodash'
 import 'whatwg-fetch'
 
@@ -61,16 +61,19 @@ class EventPage extends Component {
   static propTypes = {
     event: PropTypes.object.isRequired,
     eventId: PropTypes.string.isRequired,
+    auth: PropTypes.object,
   }
 
   state = {
     buying: null,
   }
 
-  handleBuyTicket = async (eventId, ticketId) => {
-    this.setState({
-      buying: ticketId,
-    })
+  handleBuyTicket = async (ticketId) => {
+    const { eventId, auth } = this.props
+    const token = await auth.getToken()
+
+    this.setState({ buying: ticketId })
+
     try {
       const buyTicketUrl = `${config.firebase.functionsBaseUrl}/buyTicket`
       const result = await fetch(buyTicketUrl, {
@@ -80,6 +83,13 @@ class EventPage extends Component {
           ticketId,
         }),
         headers: {
+          ...(
+            token
+              ? {
+                'authorization': `Bearer ${token}`,
+              }
+              : undefined
+          ),
           'Content-Type': 'application/json',
         },
       })
@@ -88,11 +98,12 @@ class EventPage extends Component {
     } catch (error) {
       console.error(error)
       alert('There was an error while initiating the payment request')
+      this.setState({ buying: null })
     }
   }
 
   render() {
-    const { eventId, event } = this.props
+    const { event, auth } = this.props
 
     return (
       <div>
@@ -134,7 +145,6 @@ class EventPage extends Component {
         </Container>
         <TicketArea>
           <Container>
-            {/* JSON.stringify(event) */}
             <Flex flexWrap="wrap" flexDirection={['column', 'row', 'row']}>
               {Object.keys(_.get(event, 'tickets', {})).map(key => (
                 <Box width={[1 / 2, 1 / 3, 1 / 3]} p={[2, 2, 2]} key={key}>
@@ -144,9 +154,10 @@ class EventPage extends Component {
                     faTitle={event.tickets[key].faName}
                     subtitle={event.tickets[key].subtitle}
                     faSubtitle={event.tickets[key].faSubtitle}
-                    price={event.tickets[key].price}
+                    actualPrice={event.tickets[key].price}
+                    price={Math.max(0, event.tickets[key].price - (auth ? 1 : 0))}
                     quantity={event.tickets[key].quantity}
-                    onBuyTicket={this.handleBuyTicket.bind(this, eventId, key)}
+                    onBuyTicket={this.handleBuyTicket.bind(this, key)}
                     loading={this.state.buying === key}
                     defaultImage={require('../../images/yalda.jpg')}
                   />
@@ -170,17 +181,21 @@ export default compose(
           storeAs: 'event',
         },
       ]),
-      connect(state => {
-        return {
-          eventRedux: dataToJS(state.firebase, 'event') || {},
+      connect(
+        ({ firebase }) => {
+          return {
+            auth: pathToJS(firebase, 'auth'),
+            eventRedux: dataToJS(firebase, 'event') || {},
+          }
         }
-      })
+      )
     )
   ),
   mapProps(props => {
     return {
       event: !_.isEmpty(props.eventRedux) ? props.eventRedux : props.preloadedEvent,
       eventId: props.eventId,
+      auth: props.auth,
     }
   })
 )(EventPage)

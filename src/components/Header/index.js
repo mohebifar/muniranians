@@ -19,7 +19,7 @@ const Wrapper = styled.div`
   padding: 20px 0;
 `
 
-const NavLink = styled(Link)`
+const NavLink = styled(Link) `
   display: block;
   font-size: 0.9em;
   font-weight: 400;
@@ -35,7 +35,7 @@ const LogoWrapper = styled.div`
   flex-grow: 1;
 `
 
-const Logo = styled(Link)`
+const Logo = styled(Link) `
   background-image: url('${require('../../images/logo.png')}');
   display: block;
   width: 168px;
@@ -92,7 +92,7 @@ class Header extends Component {
   }
 
   toggleDropDown = () => {
-    this.setState(state => {return { isOpen: !state.isOpen }})
+    this.setState(state => { return { isOpen: !state.isOpen } })
   }
 
   render() {
@@ -122,8 +122,8 @@ class Header extends Component {
                   ) : null}
                 </UserBox>
               ) : (
-                <NavLink to="login">Login</NavLink>
-              )}
+                  <NavLink to="login">Login</NavLink>
+                )}
             </Flex>
           </Flex>
         </Container>
@@ -145,20 +145,26 @@ Header.propTypes = {
 }
 
 export default compose(
-  connect(({ firebase }) => {return {
-    auth: pathToJS(firebase, 'auth'),
-    account: pathToJS(firebase, 'profile'),
-  }}),
+  connect(({ firebase }) => {
+    return {
+      auth: pathToJS(firebase, 'auth'),
+      account: pathToJS(firebase, 'profile'),
+    }
+  }),
   branch(
     () => !__SERVER__,
     compose(
       firebaseConnect(),
-      withProps(props => {return {
-        isAuthenticated: isLoaded(props.auth) && !isEmpty(props.auth),
-      }})
+      withProps(props => {
+        return {
+          isAuthenticated: isLoaded(props.auth) && !isEmpty(props.auth),
+        }
+      })
     ),
-    withProps(() => {return {
-      firebase: {},
-    }})
+    withProps(() => {
+      return {
+        firebase: {},
+      }
+    })
   )
 )(Header)
