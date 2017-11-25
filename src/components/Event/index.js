@@ -70,7 +70,11 @@ class EventPage extends Component {
 
   handleBuyTicket = async (ticketId) => {
     const { eventId, auth } = this.props
-    const token = await auth.getToken()
+    let token
+
+    if (auth) {
+      token = await auth.getToken()
+    }
 
     this.setState({ buying: ticketId })
 
