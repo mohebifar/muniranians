@@ -151,7 +151,7 @@ class EventPage extends Component {
           <Container>
             <Flex flexWrap="wrap" flexDirection={['column', 'row', 'row']}>
               {Object.keys(_.get(event, 'tickets', {})).map(key => (
-                <Box width={[1 / 2, 1 / 3, 1 / 3]} p={[2, 2, 2]} key={key}>
+                <Box width={[1, 1 / 2, 1 / 3]} p={[2, 2, 2]} key={key}>
                   <Ticket
                     image={event.tickets[key].image}
                     title={event.tickets[key].name}
