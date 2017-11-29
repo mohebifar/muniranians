@@ -4,11 +4,13 @@ import styled from 'styled-components'
 import Helmet from 'react-helmet'
 import { branch, compose, mapProps } from 'recompose'
 import { connect } from 'react-redux'
+import Modal from 'react-modal'
 import { firebaseConnect, dataToJS, pathToJS } from 'react-redux-firebase'
 import _ from 'lodash'
 import 'whatwg-fetch'
 
 import { Container, Flex, Box, Panel } from '../Layout'
+import PurchaseTicket from '../PurchaseTicket'
 import Ticket from '../Ticket'
 
 import config from '../../config'
@@ -66,51 +68,53 @@ class EventPage extends Component {
 
   state = {
     buying: null,
+    modalOpen: false,
+  }
+
+  closeModal = () => {
+    this.setState({ modalOpen: false })
   }
 
   handleBuyTicket = async (ticketId) => {
-    const { eventId, auth } = this.props
-    let token
-
-    if (auth) {
-      token = await auth.getToken()
-    }
-
-    this.setState({ buying: ticketId })
-
-    try {
-      const buyTicketUrl = `${config.firebase.functionsBaseUrl}/buyTicket`
-      const result = await fetch(buyTicketUrl, {
-        method: 'POST',
-        body: JSON.stringify({
-          eventId,
-          ticketId,
-        }),
-        headers: {
-          ...(
-            token
-              ? {
-                'authorization': `Bearer ${token}`,
-              }
-              : undefined
-          ),
-          'Content-Type': 'application/json',
-        },
-      })
-      const json = await result.json()
-      window.location.href = json.redirectTo
-    } catch (error) {
-      console.error(error)
-      alert('There was an error while initiating the payment request')
-      this.setState({ buying: null })
-    }
+    this.setState({
+      ticketId,
+      modalOpen: true,
+    })
   }
 
   render() {
-    const { event, auth } = this.props
+    const { event, eventId, auth } = this.props
 
     return (
       <div>
+        <Modal
+          isOpen={this.state.modalOpen}
+          contentLabel="Ticket Purchase"
+          style={{
+            overlay: {
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            },
+            content: {
+              top: '50%',
+              left: '50%',
+              right: 'auto',
+              bottom: 'auto',
+              transform: 'translate(-50%, -50%)',
+              maxWidth: '100%',
+              minWidth: '40vw',
+              overflowY: 'auto',
+              maxHeight: '98vh',
+            },
+          }}
+        >
+          <PurchaseTicket
+            event={event}
+            close={this.closeModal}
+            eventId={eventId}
+            ticketId={this.state.ticketId}
+          />
+        </Modal>
+
         <Helmet
           title={`${event.name} - MUNIranians`}
           meta={[
