@@ -5,6 +5,8 @@ import Helmet from 'react-helmet'
 import { branch, compose, mapProps } from 'recompose'
 import { connect } from 'react-redux'
 import Modal from 'react-modal'
+import moment from 'moment'
+import Icon from 'react-fontawesome'
 import { firebaseConnect, dataToJS, pathToJS } from 'react-redux-firebase'
 import _ from 'lodash'
 import 'whatwg-fetch'
@@ -16,9 +18,11 @@ import Ticket from '../Ticket'
 import config from '../../config'
 
 const Jumbotron = styled.div`
+  position: relative;
   background-color: #44c3ac;
   background-image: url(${require('../../images/yalda.jpg')});
   background-size: cover;
+  background-position: center 20%;
   padding: 60px 0;
   text-align: center;
   color: white;
@@ -82,6 +86,15 @@ const LoginOffer = styled.div`
       opacity: .8;
     }
   }
+`
+
+const DateTime = styled.div`
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #00000038;
+  padding: 15px 0;
 `
 
 class EventPage extends Component {
@@ -150,6 +163,13 @@ class EventPage extends Component {
         <Jumbotron>
           <h1>{event.name}</h1>
           <h2 className="farsi">{event.faName}</h2>
+          <DateTime>
+            <Icon name="calendar" />
+            {' '}
+            {moment(event.startsAt).format('MMM DD YYYY, h:mm A')}
+            {' - '}
+            {moment(event.endsAt).format('h:mm A')}
+          </DateTime>
         </Jumbotron>
 
         <Container>
@@ -163,7 +183,7 @@ class EventPage extends Component {
             </Box>
             <Box width={[1, 1 / 2, 9 / 24]} p={[2, 1, 1]}>
               <Panel>
-                <Address>{_.get(event, 'location.address', '')}</Address>
+                <Address><Icon name="map-marker" /> {_.get(event, 'location.address', '')}</Address>
                 {_.has(event, 'location') ? (
                   <MapIFrame
                     src={`https://www.google.com/maps/embed/v1/view?zoom=17&center=${

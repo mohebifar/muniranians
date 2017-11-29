@@ -104,8 +104,8 @@ const UpcomingEvents = ({
 )
 
 UpcomingEvents.propTypes = {
-  startsAt: PropTypes.number.isRequired,
-  endsAt: PropTypes.number.isRequired,
+  startsAt: PropTypes.any.isRequired,
+  endsAt: PropTypes.any.isRequired,
   name: PropTypes.string.isRequired,
   id: PropTypes.string.isRequired,
   description: PropTypes.string,

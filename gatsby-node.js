@@ -20,6 +20,8 @@ exports.createPages = ({ boundActionCreators, graphql }) => {
                 name
                 faName
                 description
+                startsAt
+                endsAt
                 
                 location {
                   address
