@@ -109,8 +109,9 @@ class Header extends Component {
               <Logo to="/" />
             </LogoWrapper>
             <Flex flexDirection={['column', 'row', 'row']}>
-              <NavLink to="about-us">About us</NavLink>
-              <NavLink to="help">Help us</NavLink>
+              {/* <NavLink to="about-us">About us</NavLink> */}
+              {/* <NavLink to="help">Help us</NavLink> */}
+              <NavLink to="/">Home</NavLink>
               {isAuthenticated ? (
                 <UserBox onClick={this.toggleDropDown}>
                   {auth.displayName}

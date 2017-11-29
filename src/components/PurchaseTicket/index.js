@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import LaddaButton, { L, ZOOM_OUT } from 'react-ladda'
 import { branch, compose } from 'recompose'
 import { connect } from 'react-redux'
-import { pathToJS } from 'react-redux-firebase'
+import { firebaseConnect, pathToJS } from 'react-redux-firebase'
 import 'whatwg-fetch'
 import Icon from 'react-fontawesome'
 
@@ -301,6 +301,10 @@ class PurchaseTicket extends Component {
                   </div>
                 </InteracResult>
 
+                <p style={{ fontSize: '.9em' }}>
+                  We will send your ticket to your email address once we process your payment within an hour.
+                </p>
+
                 <hr />
 
                 <p style={{ fontSize: '.8em' }}>
@@ -334,12 +338,15 @@ class PurchaseTicket extends Component {
 export default compose(
   branch(
     () => !__SERVER__,
-    connect(
-      ({ firebase }) => {
-        return {
-          auth: pathToJS(firebase, 'auth'),
+    compose(
+      firebaseConnect(),
+      connect(
+        ({ firebase }) => {
+          return {
+            auth: pathToJS(firebase, 'auth'),
+          }
         }
-      }
+      )
     )
   ),
 )(PurchaseTicket)

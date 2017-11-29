@@ -49,7 +49,6 @@ const Address = styled.p`
 const TicketArea = styled.div`
   background-image: linear-gradient(-45deg, #8067b7, #ec87c0);
   padding: 50px 0;
-  margin-top: 50px;
 `
 
 const Description = styled.div`
@@ -59,11 +58,38 @@ const Description = styled.div`
   }
 `
 
+const Spacer = styled.div`
+  margin-top: 50px;
+`
+
+const LoginOffer = styled.div`
+  margin-top: 50px;
+  background: #2a8bb1;
+  color: white;
+  text-align: center;
+  padding: 20px;
+
+  button {
+    border: none;
+    background: none;
+    color: #efefef;
+    outline: none;
+    border-bottom: 1px solid white;
+    border-radius: 0;
+    cursor: pointer;
+
+    &:hover {
+      opacity: .8;
+    }
+  }
+`
+
 class EventPage extends Component {
   static propTypes = {
     event: PropTypes.object.isRequired,
     eventId: PropTypes.string.isRequired,
     auth: PropTypes.object,
+    firebase: PropTypes.object,
   }
 
   state = {
@@ -83,7 +109,7 @@ class EventPage extends Component {
   }
 
   render() {
-    const { event, eventId, auth } = this.props
+    const { event, eventId, auth, firebase } = this.props
 
     return (
       <div>
@@ -151,6 +177,26 @@ class EventPage extends Component {
             </Box>
           </Flex>
         </Container>
+        <Spacer />
+        {
+          !auth ?
+            <LoginOffer>
+              By logging in using your Facebook account, you{'\''}ll get $1 discount on every ticket.
+              {' '}
+              <button
+                onClick={() => {
+                  firebase
+                    .login({
+                      provider: 'facebook',
+                      type: 'popup',
+                    })
+                }}
+              >
+                Click here to login now
+              </button>
+            </LoginOffer>
+            : null
+        }
         <TicketArea>
           <Container>
             <Flex flexWrap="wrap" flexDirection={['column', 'row', 'row']}>
@@ -204,6 +250,7 @@ export default compose(
       event: !_.isEmpty(props.eventRedux) ? props.eventRedux : props.preloadedEvent,
       eventId: props.eventId,
       auth: props.auth,
+      firebase: props.firebase,
     }
   })
 )(EventPage)
