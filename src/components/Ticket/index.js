@@ -97,6 +97,7 @@ const Wrapper = styled.div`
   }
   .image {
     background-size: cover;
+    background-position: center;
     height: 200px;
     margin: 10px 0;
   }

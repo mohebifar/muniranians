@@ -35,6 +35,7 @@ exports.createPages = ({ boundActionCreators, graphql }) => {
                   subtitle
                   faSubtitle
                   quantity
+                  image
                   price
                 }
               }
