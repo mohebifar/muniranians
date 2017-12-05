@@ -157,7 +157,7 @@ class EventPage extends Component {
         <Helmet
           title={`${event.name} - MUNIranians`}
           meta={[
-            { name: 'description', content: event.description },
+            { name: 'description', content: event.metaDescription },
           ]}
         />
         <Jumbotron>

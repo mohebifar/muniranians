@@ -20,6 +20,7 @@ exports.createPages = ({ boundActionCreators, graphql }) => {
                 name
                 faName
                 description
+                metaDescription
                 startsAt
                 endsAt
                 
