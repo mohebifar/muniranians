@@ -95,6 +95,16 @@ class Header extends Component {
     this.setState(state => { return { isOpen: !state.isOpen } })
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.auth !== nextProps.auth && window.drift) {
+      window.drift.reset()
+
+      if (nextProps.auth) {
+        window.drift.identify(nextProps.auth.uid, { email: nextProps.auth.email })
+      }
+    }
+  }
+
   render() {
     const { isAuthenticated, auth, firebase: { logout } } = this.props
 
@@ -140,6 +150,8 @@ Header.propTypes = {
     logout: PropTypes.func.isRequired,
   }),
   auth: PropTypes.shape({
+    email: PropTypes.string,
+    uid: PropTypes.string,
     displayName: PropTypes.string,
     photoURL: PropTypes.string,
   }),
