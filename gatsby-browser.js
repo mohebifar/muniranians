@@ -3,6 +3,7 @@ import { Router } from 'react-router-dom'
 import { Provider } from 'react-redux'
 
 import createStore from './src/redux/createStore'
+import './src/drift'
 
 window.__SERVER__ = false
 global.__SERVER__ = false
