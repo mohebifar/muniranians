@@ -20,9 +20,8 @@ import config from '../../config'
 const Jumbotron = styled.div`
   position: relative;
   background-color: #44c3ac;
-  background-image: url(${require('../../images/yalda.jpg')});
   background-size: cover;
-  background-position: center 20%;
+  background-position: center 60%;
   padding: 60px 0;
   text-align: center;
   color: white;
@@ -123,6 +122,7 @@ class EventPage extends Component {
 
   render() {
     const { event, eventId, auth, firebase } = this.props
+    const tickets = _.get(event, 'tickets', null)
 
     return (
       <div>
@@ -160,7 +160,7 @@ class EventPage extends Component {
             { name: 'description', content: event.metaDescription },
           ]}
         />
-        <Jumbotron>
+        <Jumbotron style={{ backgroundImage: `url(${event.coverPhoto})` }}>
           <h1>{event.name}</h1>
           <h2 className="farsi">{event.faName}</h2>
           <DateTime>
@@ -199,47 +199,33 @@ class EventPage extends Component {
         </Container>
         <Spacer />
         {
-          !auth ?
-            <LoginOffer>
-              By logging in using your Facebook account, you{'\''}ll get $1 discount on every ticket.
-              {' '}
-              <button
-                onClick={() => {
-                  firebase
-                    .login({
-                      provider: 'facebook',
-                      type: 'popup',
-                    })
-                }}
-              >
-                Click here to login now
-              </button>
-            </LoginOffer>
-            : null
+          tickets ? (
+            <TicketArea>
+              <Container>
+                <Flex flexWrap="wrap" flexDirection={['column', 'row', 'row']}>
+                  {Object.keys(tickets).map(key => (
+                    <Box width={[1, 1 / 2, 1 / 3]} p={[2, 2, 2]} key={key}>
+                      <Ticket
+                        image={event.tickets[key].image}
+                        title={event.tickets[key].name}
+                        faTitle={event.tickets[key].faName}
+                        subtitle={event.tickets[key].subtitle}
+                        faSubtitle={event.tickets[key].faSubtitle}
+                        actualPrice={event.tickets[key].price}
+                        price={Math.max(0, event.tickets[key].price - (auth ? 1 : 0))}
+                        quantity={event.tickets[key].quantity}
+                        onBuyTicket={this.handleBuyTicket.bind(this, key)}
+                        loading={this.state.buying === key}
+                        defaultImage={require('../../images/yalda.jpg')}
+                      />
+                    </Box>
+                  ))}
+                </Flex>
+              </Container>
+            </TicketArea>
+          ) :
+            null
         }
-        <TicketArea>
-          <Container>
-            <Flex flexWrap="wrap" flexDirection={['column', 'row', 'row']}>
-              {Object.keys(_.get(event, 'tickets', {})).map(key => (
-                <Box width={[1, 1 / 2, 1 / 3]} p={[2, 2, 2]} key={key}>
-                  <Ticket
-                    image={event.tickets[key].image}
-                    title={event.tickets[key].name}
-                    faTitle={event.tickets[key].faName}
-                    subtitle={event.tickets[key].subtitle}
-                    faSubtitle={event.tickets[key].faSubtitle}
-                    actualPrice={event.tickets[key].price}
-                    price={Math.max(0, event.tickets[key].price - (auth ? 1 : 0))}
-                    quantity={event.tickets[key].quantity}
-                    onBuyTicket={this.handleBuyTicket.bind(this, key)}
-                    loading={this.state.buying === key}
-                    defaultImage={require('../../images/yalda.jpg')}
-                  />
-                </Box>
-              ))}
-            </Flex>
-          </Container>
-        </TicketArea>
       </div>
     )
   }

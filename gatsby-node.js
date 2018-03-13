@@ -23,6 +23,7 @@ exports.createPages = ({ boundActionCreators, graphql }) => {
                 metaDescription
                 startsAt
                 endsAt
+                coverPhoto
                 
                 location {
                   address
