@@ -47,6 +47,7 @@ exports.createPages = ({ boundActionCreators, graphql }) => {
     `
       ).then(result => {
         if (result.errors) {
+          console.error(result.errors)
           reject(result.errors)
         }
 
@@ -85,8 +86,10 @@ exports.createPages = ({ boundActionCreators, graphql }) => {
       }
     }`).then(result => {
           if (result.errors) {
+            console.error(result.errors)
             reject(result.errors)
           }
+          
           // Create pages for each markdown file.
           result.data.allCompetition.edges.forEach(({ node }) => {
             const path = `/contests/${node.id}`
