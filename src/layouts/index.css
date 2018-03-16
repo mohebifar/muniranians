@@ -630,3 +630,7 @@ pre tt:after {
 .ladda-button[data-size=xs] {
   padding: 0px 8px !important;
 }
+
+.app-image-gallery img {
+  margin-bottom: 0;
+}

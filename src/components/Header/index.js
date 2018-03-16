@@ -63,6 +63,7 @@ const UserBox = styled.div`
     left: 0;
     right: 0;
     box-shadow: 0 0 10px #0000001f;
+    z-index: 9999;
 
     > button {
       padding: 10px;

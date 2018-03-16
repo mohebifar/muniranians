@@ -41,7 +41,7 @@ const testimonials = [
     text:
       'Doing a Ph.D. in Memorial University was a great opportunity for me to flourish both in  scientific research as well as other aspects of my life. Although being in a new environment far from my home country made me be under a lot of pressure, having such a congenial atmosphere with lots of helping and Iranian friends ease every tension for me!',
     photo:
-      'https://scontent.fyqm1-1.fna.fbcdn.net/v/t31.0-8/21994118_10155770527339764_4655392796706713389_o.jpg?oh=116ae529adb921ba8bf22201b5f2df2d&oe=5A9F3A50',
+      'https://firebasestorage.googleapis.com/v0/b/muniranians-121f4.appspot.com/o/contests%2Fauthors%2Fhoda.jpg?alt=media&token=786852fc-871f-4a3a-a0ef-47bc7e1a9164',
   },
   {
     name: 'Mehran',

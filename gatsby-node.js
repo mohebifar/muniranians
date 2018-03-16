@@ -6,7 +6,7 @@ exports.createPages = ({ boundActionCreators, graphql }) => {
   gql = graphql
   const { createPage } = boundActionCreators
 
-  return new Promise((resolve, reject) => {
+  const eventPages = new Promise((resolve, reject) => {
     const eventPageTemplate = path.resolve('src/templates/event.js')
     // Query for markdown nodes to use in creating pages.
     resolve(
@@ -65,6 +65,47 @@ exports.createPages = ({ boundActionCreators, graphql }) => {
       })
     )
   })
+
+  const competitionPages = new Promise((resolve, reject) => {
+    const competitionPageTemplate = path.resolve('src/templates/competition.js')
+    // Query for markdown nodes to use in creating pages.
+    resolve(
+      graphql(`{
+      allCompetition {
+        edges {
+          node {
+            id
+            items {
+              author
+              authorPhoto
+              url
+            }
+          }
+        }
+      }
+    }`).then(result => {
+          if (result.errors) {
+            reject(result.errors)
+          }
+          // Create pages for each markdown file.
+          result.data.allCompetition.edges.forEach(({ node }) => {
+            const path = `/contests/${node.id}`
+            console.log(path)
+            
+            createPage({
+              path,
+              component: competitionPageTemplate,
+              context: {
+                competitionId: node.id,
+                preloadedCompetition: node,
+              },
+            })
+          })
+        })
+    )
+  })
+
+  return Promise.all([eventPages, competitionPages])
 }
 
 // Override main page with events data

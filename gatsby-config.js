@@ -20,6 +20,10 @@ module.exports = {
             type: 'Event',
             path: 'events',
           },
+          {
+            type: 'Competition',
+            path: 'competitions',
+          },
         ],
       },
     },
