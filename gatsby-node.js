@@ -77,11 +77,6 @@ exports.createPages = ({ boundActionCreators, graphql }) => {
           node {
             id
             name
-            items {
-              author
-              authorPhoto
-              url
-            }
           }
         }
       }
