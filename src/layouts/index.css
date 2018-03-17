@@ -634,3 +634,48 @@ pre tt:after {
 .app-image-gallery img {
   margin-bottom: 0;
 }
+
+.Modal {
+  top: 50%;
+  left: 50%;
+  right: auto;
+  bottom: auto;
+  transform: translate(-50%, -50%);
+  max-width: 100%;
+  min-width: 40vw;
+  overflow-y: auto;
+  max-height: 98vh;
+  position: absolute;
+  outline: none;
+}
+
+.Overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.4);
+}
+
+@media(max-width: 720px) {
+  .Modal {
+    min-width: 80vw;
+  }
+
+  .Modal > div > img {
+    margin: 0
+  }
+}
+
+.Youtube-Video {
+  display: block;
+  margin: auto;
+}
+@media(min-width: 720px) {
+  .Modal .Youtube-Video {
+    display: block;
+    margin: auto;
+    margin-bottom: 50px;
+  }
+}

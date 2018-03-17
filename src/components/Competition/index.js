@@ -4,15 +4,15 @@ import styled from 'styled-components'
 import Helmet from 'react-helmet'
 import { branch, compose, mapProps } from 'recompose'
 import { connect } from 'react-redux'
-import ImageGallery from 'react-image-gallery'
+import Modal from 'react-modal'
+import YouTube from 'react-youtube'
+import Icon from 'react-fontawesome'
 import Masonry from 'react-masonry-component'
-import moment from 'moment'
 import { firebaseConnect, dataToJS, pathToJS } from 'react-redux-firebase'
 import _ from 'lodash'
 import 'whatwg-fetch'
 
-import { Container, Flex, Box, Panel } from '../Layout'
-import 'react-image-gallery/styles/css/image-gallery.css'
+import { Container } from '../Layout'
 
 const masonryOptions = {
   transitionDuration: 0,
@@ -45,6 +45,17 @@ const GalleryItem = styled.li`
   box-shadow: 0 0 15px rgba(0,0,0,0.3);
   border-radius: 5px;
   overflow: hidden;
+  cursor: pointer;
+
+  .play-icon {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.41);
+    font-size: 5em;
+  }
 
   @media(max-width: 720px) {
     width: 90%;
@@ -94,15 +105,18 @@ const Wrapper = styled.div`
 const CardCaption = styled.div`
   background-color: white;
   margin: 0;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
   padding: 10px;
   height: 50px;
   display: flex;
   flex-direction: row;
   align-items: center;
+
+  @media(min-width: 720px) {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
   
 
   > img {
@@ -149,6 +163,12 @@ const VoteButton = styled.button`
 
 const DEFAULT_AUTHOR_PHOTO = 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'
 
+const modalStyle = {
+  overlay: {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+}
+
 class CompetitionPage extends Component {
   static propTypes = {
     competition: PropTypes.object.isRequired,
@@ -159,6 +179,7 @@ class CompetitionPage extends Component {
 
   state = {
     temporaryLikes: [],
+    selectedItem: null,
   }
 
   handleVote = (item, itemId) => {
@@ -205,8 +226,69 @@ class CompetitionPage extends Component {
     const liked = this.isLiked(item, key)
 
     return (
-      <GalleryItem key={key} width={[1, 1 / 2, 1 / 3]} m={[2, 1, 1]}>
+      <GalleryItem
+        onClick={() => this.setState({ selectedItem: key })}
+        key={key}
+        width={[1, 1 / 2, 1 / 3]}
+        m={[2, 1, 1]}
+      >
+        {
+          item.youtube
+            ? <Icon
+              className="play-icon"
+              name="play-circle"
+            />
+            : null
+        }
         <img src={item.url} />
+        <CardCaption onClick={e => e.stopPropagation()}>
+          <img src={item.authorPhoto || DEFAULT_AUTHOR_PHOTO} />
+          <span className="name">
+            by {item.author}
+          </span>
+          <span className="votes">
+            {item.votes ? Object.keys(item.votes).length : 0} votes
+          <VoteButton
+              liked={liked}
+              onClick={() => {
+                this.handleVote(item, key)
+              }}
+            >
+              <Icon
+                name={`heart${liked ? '' : '-o'}`}
+              />
+            </VoteButton>
+          </span>
+        </CardCaption>
+      </GalleryItem>
+    )
+  }
+
+  renderModal() {
+    const { competition } = this.props
+    const { selectedItem: key } = this.state
+    const item = competition.items[key]
+    const liked = this.isLiked(item, key)
+
+    return (
+      <div style={{ backgroundColor: 'white' }}>
+        <button
+          onClick={() => this.setState({ selectedItem: null })}
+          style={{ border: 'none', right: 15, top: 15, position: 'absolute', borderRadius: 5, cursor: 'pointer' }}
+        >
+          <Icon name="times" />
+        </button>
+
+        {
+          item.youtube
+            ? <YouTube
+              className="Youtube-Video"
+              videoId={item.youtube}
+            />
+            : <img src={item.url} />
+        }
+
+
         <CardCaption>
           <img src={item.authorPhoto || DEFAULT_AUTHOR_PHOTO} />
           <span className="name">
@@ -226,7 +308,7 @@ class CompetitionPage extends Component {
             </VoteButton>
           </span>
         </CardCaption>
-      </GalleryItem>
+      </div>
     )
   }
 
@@ -259,15 +341,19 @@ class CompetitionPage extends Component {
               competition.items.map(this.renderItem)
             }
           </Masonry>
-          {/* <ImageGallery
-            items={competition.items}
-            lazyLoad={false}
-            showFullscreenButton
-            showThumbnails
-            showNav
-            thumbnailPosition="bottom"
-            additionalClass="app-image-gallery"
-          /> */}
+          <Modal
+            onRequestClose={() => this.setState({ selectedItem: null })}
+            isOpen={this.state.selectedItem !== null}
+            contentLabel=""
+            className="Modal"
+            overlayClassName="Overlay"
+          >
+            {
+              this.state.selectedItem !== null
+                ? this.renderModal()
+                : null
+            }
+          </Modal>
         </Container>
       </Wrapper>
     )

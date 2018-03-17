@@ -23,6 +23,13 @@ module.exports = {
           {
             type: 'Competition',
             path: 'competitions',
+            map: node => {
+              node.items.forEach(item => {
+                delete item.votes
+              })
+
+              return node
+            },
           },
         ],
       },
