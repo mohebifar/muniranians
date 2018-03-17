@@ -24,11 +24,15 @@ module.exports = {
             type: 'Competition',
             path: 'competitions',
             map: node => {
-              node.items.forEach(item => {
-                delete item.votes
-              })
-
-              return node
+              return {
+                ...node,
+                items: node.items.map((item) => {
+                  return {
+                    ...item,
+                    votes: null,
+                  }
+                }),
+              }
             },
           },
         ],
