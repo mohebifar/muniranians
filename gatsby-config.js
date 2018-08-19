@@ -4,6 +4,14 @@ module.exports = {
   },
   plugins: [
     'gatsby-plugin-react-helmet',
+    'gatsby-transformer-remark',
+    {
+      resolve: 'gatsby-source-filesystem',
+      options: {
+        path: `${__dirname}/src/content`,
+        name: 'markdown-pages',
+      },
+    },
     {
       resolve: 'gatsby-source-firebase',
       options: {

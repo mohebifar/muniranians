@@ -67,49 +67,79 @@ exports.createPages = ({ boundActionCreators, graphql }) => {
     )
   })
 
-  const competitionPages = new Promise((resolve, reject) => {
-    const competitionPageTemplate = path.resolve('src/templates/competition.js')
-    // Query for markdown nodes to use in creating pages.
-    resolve(
-      graphql(`{
-      allCompetition {
+  // const competitionPages = new Promise((resolve, reject) => {
+  //   const competitionPageTemplate = path.resolve('src/templates/competition.js')
+  //   // Query for markdown nodes to use in creating pages.
+  //   resolve(
+  //     graphql(`{
+  //     allCompetition {
+  //       edges {
+  //         node {
+  //           id
+  //           name
+  //           items {
+  //             author
+  //             authorPhoto
+  //             url
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }`).then(result => {
+  //         if (result.errors) {
+  //           console.error(result.errors)
+  //           reject(result.errors)
+  //         }
+          
+  //         // Create pages for each markdown file.
+  //         result.data.allCompetition.edges.forEach(({ node }) => {
+  //           const path = `/contests/${node.id}`
+  //           console.log(path)
+            
+  //           createPage({
+  //             path,
+  //             component: competitionPageTemplate,
+  //             context: {
+  //               competitionId: node.id,
+  //               preloadedCompetition: node,
+  //             },
+  //           })
+  //         })
+  //       })
+  //   )
+  // })
+
+  const blogPostTemplate = path.resolve('src/templates/content.js')
+
+  const postPages = graphql(`
+    {
+      allMarkdownRemark(
+        limit: 1000
+      ) {
         edges {
           node {
-            id
-            name
-            items {
-              author
-              authorPhoto
-              url
+            frontmatter {
+              path
             }
           }
         }
       }
-    }`).then(result => {
-          if (result.errors) {
-            console.error(result.errors)
-            reject(result.errors)
-          }
-          
-          // Create pages for each markdown file.
-          result.data.allCompetition.edges.forEach(({ node }) => {
-            const path = `/contests/${node.id}`
-            console.log(path)
-            
-            createPage({
-              path,
-              component: competitionPageTemplate,
-              context: {
-                competitionId: node.id,
-                preloadedCompetition: node,
-              },
-            })
-          })
-        })
-    )
-  })
+    }
+  `).then(result => {
+    if (result.errors) {
+      return Promise.reject(result.errors)
+    }
 
-  return Promise.all([eventPages, competitionPages])
+    return result.data.allMarkdownRemark.edges.map(({ node }) => {
+      createPage({
+        path: node.frontmatter.path,
+        component: blogPostTemplate,
+        context: {}, // additional data can be passed via context
+      })
+    })
+  })
+  
+  return Promise.all([eventPages, Promise.all(postPages)/*, competitionPages*/])
 }
 
 // Override main page with events data

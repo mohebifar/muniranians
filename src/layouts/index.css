@@ -625,6 +625,7 @@ pre tt:after {
 }
 .farsi {
   font-family: Vazir, tahoma, sans-serif;
+  direction: rtl;
 }
 
 .ladda-button[data-size=xs] {
