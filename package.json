@@ -6,7 +6,7 @@
   "dependencies": {
     "final-form": "^1.1.0",
     "functional-easing": "^1.0.8",
-    "gatsby": "^1.9.119",
+    "gatsby": "^1.9.277",
     "gatsby-cli": "^1.1.23",
     "gatsby-link": "^1.6.22",
     "gatsby-plugin-favicon": "^2.0.0",
@@ -55,6 +55,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^8.0.2",
+    "babel-plugin-transform-regenerator": "^6.26.0",
     "eslint": "^4.11.0",
     "eslint-config-google": "^0.9.1",
     "eslint-config-prettier": "^2.8.0",
