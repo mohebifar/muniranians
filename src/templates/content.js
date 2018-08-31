@@ -18,8 +18,8 @@ export default function Template({
         <h1 className="farsi">{frontmatter.title}</h1>
       </Jumbotron>
       <Container>
-        <Flex style={{ marginTop: 50 }}>
-          <Box width={[1, 8/12]} pr={[0, 10]}>
+        <Flex style={{ marginTop: 50 }} flexDirection={['column-reverse', 'column-reverse', 'row']}>
+          <Box width={[1, 1, 8/12]} pr={[0, 0, 10]}>
             <BlogPostPanel>
               <div
                 className="blog-post-content"
@@ -27,9 +27,9 @@ export default function Template({
               />
             </BlogPostPanel>
           </Box>
-          <Box width={[1, 4/12]} pl={[0, 10]}>
+          <Box mb={[20, 20, 0]} width={[1, 1, 4/12]} pl={[0, 0, 10]}>
             <RelatedContentPanel className="farsi">
-              <h2>سایر مطالب</h2>
+              <h2 className="farsi">سایر مطالب</h2>
               <RelatedPostsList>
                 {
                   edges.map(
