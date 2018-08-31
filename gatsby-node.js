@@ -189,8 +189,3 @@ exports.onCreatePage = ({ page, boundActionCreators, graphql }) => {
   })
 
 }
-
-exports.modifyBabelrc = ({ babelrc }) => ({
-  ...babelrc,
-  plugins: babelrc.plugins.concat(['transform-regenerator']),
-})
