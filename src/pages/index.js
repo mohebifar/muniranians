@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import Helmet from 'react-helmet'
 
 import { Container, Flex, Box } from '../components/Layout'
 import Testimonial from '../components/Testimonial'
@@ -16,6 +17,13 @@ const Jumbotron = styled.div`
   padding: 60px 0;
   text-align: center;
   color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  @media screen and (min-width: 52em) and (min-height: 650px) {
+    height: calc(50vh - 35px);
+  }
 
   h1 {
     font-weight: 100;
@@ -55,6 +63,17 @@ const testimonials = [
 
 const IndexPage = ({ pathContext: { events } }) => (
   <div>
+    <Helmet>
+      <title>MUNIranians - The Iranians Student Society of Memorial University of Newfoundland</title>
+      <meta name="description" content="انجمن دانشجویان ایرانی دانشگاه مموریال نیوفاوندلند" />
+      <meta name="keywords" content="Memorial University, Iranian, MUNIranians, ایرانیان کانادا, ایرانی های کانادا, ایرانی, نیوفاوندلند, سنت جونز, سینت‌جانز, سینت جانز, دانشگاه مموریال" />
+      <meta property="og:title" content="MUNIranians" />
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content="https://muniranians.com/" />
+      <meta property="og:image" content={require('!!file!../images/logo.png')} />
+      <meta property="og:description" content="The Iranians Student Society of Memorial University of Newfoundland" />
+    </Helmet>
+
     <Jumbotron>
       <h1>
         The <strong>Iranians</strong> <br /> Student Society

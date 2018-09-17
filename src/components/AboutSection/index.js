@@ -10,10 +10,17 @@ import {
 } from 'react-imation/tween-value-factories'
 import { calculateScrollY } from 'react-track/tracking-formulas'
 import { Easer } from 'functional-easing'
+import styled from 'styled-components'
 
 import { Flex, Box } from '../Layout'
 
 const easing = new Easer().using('in-cubic')
+
+const Wrapper = styled(Flex)`
+  @media screen and (min-width: 52em) and (min-height: 650px) {
+    height: calc(50vh - 40px);
+  }
+`
 
 class AboutSection extends Component {
   renderSvg(scrollY) {
@@ -107,7 +114,7 @@ class AboutSection extends Component {
 
   render() {
     return (
-      <Flex
+      <Wrapper
         flexDirection={['column', 'column', 'row']}
         style={{ paddingTop: 30 }}
       >
@@ -131,7 +138,7 @@ class AboutSection extends Component {
             its reach.
           </p>
         </Box>
-      </Flex>
+      </Wrapper>
     )
   }
 }

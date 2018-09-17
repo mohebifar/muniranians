@@ -1,13 +1,11 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import qs from 'qs'
-import _ from 'lodash'
 import 'whatwg-fetch'
 import Icon from 'react-fontawesome'
+import Helmet from 'react-helmet'
+import GatsbyLink from 'gatsby-link'
 
 import { Container, Flex, Box, Panel } from '../components/Layout'
-import GatsbyLink from 'gatsby-link';
 
 const Jumbotron = styled.div`
   background-color: #8a9694;
@@ -63,7 +61,7 @@ const links = [
   },
   {
     title: 'ورود به سینت‌جانز',
-    path: '/guides/coming-to-stjohns',
+    path: '/guides/coming-to-st-johns',
     icon: 'plane',
   },
   {
@@ -85,6 +83,11 @@ const links = [
 
 const GuidesPage = () => (
   <div>
+    <Helmet>
+      <title>راهنمای ورودی‌های جدید - مان‌ایرانیان</title>
+      <meta name="description" content="راهنمای ورود به سینت‌جانز نیوفاوندلند کانادا برای دانشجویان جدید دانشگاه مموریال" />
+      <meta name="keywords" content="Memorial University, Iranian, MUNIranians, Guide, Newcomers, Persian, راهنمای ورود به کانادا, حساب بانکی کانادا, بلیت کانادا, نیوفاوندلند, Newfoundland" />
+    </Helmet>
     <Jumbotron>
       <h1 className="farsi">راهنمای ورودی‌های جدید</h1>
       <h2>Guides for Newcomers</h2>

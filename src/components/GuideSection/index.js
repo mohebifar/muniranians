@@ -3,35 +3,35 @@ import styled from 'styled-components'
 import Link from 'gatsby-link'
 
 const Wrapper = styled.div`
-  background: #44c3ac;
+  background: #eee;
   padding: 50px 0;
-  color: white;
+  color: #333;
   text-align: center;
 
   h3 {
     font-weight: 300;
-    font-size: 2em;
+    font-size: 1.7em;
     margin-bottom: 10px;
   }
 
   h4 {
     font-size: 1em;
     font-weight: 200;
-    color: rgba(255, 255, 255, 0.9);
   }
 `
 
 const Button = styled(Link)`
   padding: 10px 20px;
-  color: white;
+  color: #444;
+  font-weight: bold;
   border-radius: 3px;
-  border: 1px solid white;
+  border: 1px solid #888;
   margin-top: 5px;
   display: inline-block;
 
   &:hover {
-    background-color: white;
-    color: #44c3ac;
+    background-color: #9b0139;
+    color: white;
   }
 
   &, &:hover {
@@ -39,7 +39,7 @@ const Button = styled(Link)`
   }
 `
 
-const HelpBanner = () => (
+const GuideSection = () => (
   <Wrapper>
     <h3 className="farsi">
       راهنمای ورودی‌های جدید
@@ -50,4 +50,4 @@ const HelpBanner = () => (
   </Wrapper>
 )
 
-export default HelpBanner
+export default GuideSection
