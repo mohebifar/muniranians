@@ -1,16 +1,16 @@
-import React from "react";
+import React from 'react'
 
-import styled from "styled-components";
-import { Container, Panel, Box, Flex } from "../components/Layout";
+import styled from 'styled-components'
+import { Container, Panel, Box, Flex } from '../components/Layout'
 
 import Link from 'gatsby-link'
 
 export default function Template({
-  data // this prop will be injected by the GraphQL query below.
+  data, // this prop will be injected by the GraphQL query below.
 }) {
-  const { markdownRemark, allMarkdownRemark } = data; // data.markdownRemark holds our post data
-  const { frontmatter, html } = markdownRemark;
-  const { edges } = allMarkdownRemark;
+  const { markdownRemark, allMarkdownRemark } = data // data.markdownRemark holds our post data
+  const { frontmatter, html } = markdownRemark
+  const { edges } = allMarkdownRemark
 
   return (
     <div>
@@ -19,7 +19,7 @@ export default function Template({
       </Jumbotron>
       <Container>
         <Flex style={{ marginTop: 50 }} flexDirection={['column-reverse', 'column-reverse', 'row']}>
-          <Box width={[1, 1, 8/12]} pr={[0, 0, 10]}>
+          <Box width={[1, 1, 8 / 12]} pr={[0, 0, 10]}>
             <BlogPostPanel>
               <div
                 className="blog-post-content"
@@ -27,14 +27,14 @@ export default function Template({
               />
             </BlogPostPanel>
           </Box>
-          <Box mb={[20, 20, 0]} width={[1, 1, 4/12]} pl={[0, 0, 10]}>
+          <Box mb={[20, 20, 0]} width={[1, 1, 4 / 12]} pl={[0, 0, 10]}>
             <RelatedContentPanel className="farsi">
               <h2 className="farsi">سایر مطالب</h2>
               <RelatedPostsList>
                 {
                   edges.map(
                     ({ node: { frontmatter: page } }) => (
-                      <li>
+                      <li key={page.path}>
                         <Link activeClassName="active" to={page.path}>{page.title}</Link>
                       </li>
                     )
@@ -46,7 +46,7 @@ export default function Template({
         </Flex>
       </Container>
     </div>
-  );
+  )
 }
 
 const BlogPostPanel = styled(Panel)`
@@ -79,7 +79,7 @@ const BlogPostPanel = styled(Panel)`
       background: #e0d6eb;
     }
   }
-`;
+`
 
 const RelatedContentPanel = styled(Panel)`
   a {
@@ -131,7 +131,7 @@ const Jumbotron = styled.div`
   h2 {
     font-weight: 300;
   }
-`;
+`
 
 export const pageQuery = graphql`
   query BlogPostByPath($path: String!) {
@@ -156,4 +156,4 @@ export const pageQuery = graphql`
       }
     }
   }
-`;
+`

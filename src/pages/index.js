@@ -7,6 +7,7 @@ import Testimonial from '../components/Testimonial'
 import AboutSection from '../components/AboutSection'
 import UpcomingEvents from '../components/UpcomingEvents'
 import HelpBanner from '../components/HelpBanner'
+import GuideSection from '../components/GuideSection'
 
 const Jumbotron = styled.div`
   background-color: #44c3ac;
@@ -64,11 +65,13 @@ const IndexPage = ({ pathContext: { events } }) => (
       <AboutSection />
     </Container>
 
+    <GuideSection />
+
     <Container fluid style={{ background: '#f9f9f9' }}>
       <Container>
         <Flex
           flexDirection="column"
-          style={{ paddingTop: 40, paddingBottom: 40, marginTop: 20 }}
+          style={{ paddingTop: 40, paddingBottom: 40 }}
         >
           <h2>Events</h2>
           {events

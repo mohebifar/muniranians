@@ -5,6 +5,7 @@ import {
   fontSize,
   color,
   flexDirection,
+  justifyContent,
   flexWrap,
 } from 'styled-system'
 
@@ -27,7 +28,7 @@ export const Box = styled.div`
 
 export const Flex = styled.div`
   display: flex;
-  ${flexDirection} ${flexWrap};
+  ${flexDirection}; ${flexWrap}; ${justifyContent};
 `
 
 export const Panel = styled.div`

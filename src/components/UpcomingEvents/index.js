@@ -96,9 +96,19 @@ const UpcomingEvents = ({
       </div>
     </Info>
     <div>
-      <BuyTicket to={`/events/${id}`}>
-        <Icon name="ticket" /> Buy Ticket
-      </BuyTicket>
+      {
+        moment(endsAt).isAfter(moment()) ? (
+          <BuyTicket to={`/events/${id}`}>
+            <Icon name="ticket" /> Buy Ticket
+          </BuyTicket>
+        ) : (<div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+          <div style={{ paddingRight: 10, fontSize: '.4em', color: 'tomato' }}>Event has ended</div>
+          <BuyTicket to={`/events/${id}`}>
+            <Icon name="search" /> View
+          </BuyTicket>
+          </div>
+        )
+      }
     </div>
   </Wrapper>
 )
