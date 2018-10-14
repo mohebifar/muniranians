@@ -21,6 +21,7 @@ exports.createPages = ({ boundActionCreators, graphql }) => {
                 faName
                 description
                 metaDescription
+                eventBriteId
                 startsAt
                 endsAt
                 coverPhoto

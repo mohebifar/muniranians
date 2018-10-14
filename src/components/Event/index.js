@@ -10,6 +10,7 @@ import Icon from 'react-fontawesome'
 import { firebaseConnect, dataToJS, pathToJS } from 'react-redux-firebase'
 import _ from 'lodash'
 import 'whatwg-fetch'
+import load from 'little-loader'
 
 import { Container, Flex, Box, Panel } from '../Layout'
 import PurchaseTicket from '../PurchaseTicket'
@@ -109,6 +110,26 @@ class EventPage extends Component {
     modalOpen: false,
   }
 
+  componentDidMount() {
+    if (this.props.event.eventBriteId) {
+      const eventId = this.props.event.eventBriteId
+      load('https://www.eventbrite.com/static/widgets/eb_widgets.js', () => {
+        var exampleCallback = function () {
+          console.log('Order complete!')
+        }
+
+        window.EBWidgets.createWidget({
+          widgetType: 'checkout',
+          eventId,
+          iframeContainerId: `eventbrite-widget-container-${eventId}`,
+  
+          iframeContainerHeight: 425,
+          onOrderComplete: exampleCallback,
+        })
+      })
+    }
+  }
+
   closeModal = () => {
     this.setState({ modalOpen: false })
   }
@@ -179,6 +200,12 @@ class EventPage extends Component {
                 <Description
                   dangerouslySetInnerHTML={{ __html: event.description }}
                 />
+
+                {
+                  event.eventBriteId ? (
+                    <div id={`eventbrite-widget-container-${event.eventBriteId}`} />
+                  ) : null
+                }
               </Panel>
             </Box>
             <Box width={[1, 1 / 2, 9 / 24]} p={[2, 1, 1]}>
