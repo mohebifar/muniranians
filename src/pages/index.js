@@ -48,7 +48,7 @@ const testimonials = [
     name: 'Hoda',
     position: 'Ph.D. Candidate Civil Engineering',
     text:
-      'Doing a Ph.D. in Memorial University was a great opportunity for me to flourish both in  scientific research as well as other aspects of my life. Although being in a new environment far from my home country made me be under a lot of pressure, having such a congenial atmosphere with lots of helping and Iranian friends ease every tension for me!',
+      'Doing Ph.D. in Memorial University was a great opportunity for me to flourish both in scientific research as well as other aspects of my life. Although being in a new environment far from my home country put me under a lot of pressure, having such a congenial atmosphere with lots of helping and Iranian friends ease every tension for me!',
     photo:
       'https://firebasestorage.googleapis.com/v0/b/muniranians-121f4.appspot.com/o/contests%2Fauthors%2Fhoda.jpg?alt=media&token=786852fc-871f-4a3a-a0ef-47bc7e1a9164',
   },
@@ -66,7 +66,7 @@ const IndexPage = ({ pathContext: { events } }) => (
     <Helmet>
       <title>MUNIranians - The Iranians Student Society of Memorial University of Newfoundland</title>
       <meta name="description" content="انجمن دانشجویان ایرانی دانشگاه مموریال نیوفاوندلند" />
-      <meta name="keywords" content="Memorial University, Iranian, MUNIranians, ایرانیان کانادا, ایرانی های کانادا, ایرانی, نیوفاوندلند, سنت جونز, سینت‌جانز, سینت جانز, دانشگاه مموریال" />
+      <meta name="keywords" content="Memorial University, Iranian, MUNIranians, ایرانیان کانادا, ایرانی های کانادا, ایرانی, نیوفاوندلند, سنت جونز, سینت‌جانز, سینت جانز, دانشگاه مموریال, ایرانیان دانشگاه مموریال نیوفاندلند" />
       <meta property="og:title" content="MUNIranians" />
       <meta property="og:type" content="website" />
       <meta property="og:url" content="https://muniranians.com/" />
