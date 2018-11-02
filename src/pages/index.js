@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Helmet from 'react-helmet'
+import moment from 'moment'
 
 import { Container, Flex, Box } from '../components/Layout'
 import Testimonial from '../components/Testimonial'
@@ -94,7 +95,10 @@ const IndexPage = ({ pathContext: { events } }) => (
         >
           <h2>Events</h2>
           {events
-            ? events.map(({ node: event }) => (
+            ? events
+            .map(({ node: event }) => event)
+            .sort((b, a) => moment.utc(a.endsAt).diff(moment.utc(b.endsAt)))
+            .map(event => (
                 <UpcomingEvents key={event.id} id={event.id} {...event} />
               ))
             : null}
