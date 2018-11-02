@@ -147,10 +147,10 @@ const InteracResult = styled.div`
 // eslint-disable-next-line react/prop-types
 const renderPaymentMethod = ({ input }) => (
   <div>
-    <PaymentMethod active={input.value === 'interac'} type="button">
+    <PaymentMethod active={input.value === 'interac'} type="button" onClick={() => input.onChange('interac')}>
       <Image src="http://www.rbcroyalbank.com/products/deposits/_assets-custom/images/interac-email-transfer-logo.png" />
     </PaymentMethod>
-    <PaymentMethod active={input.value === 'paypal'} type="button" disabled>
+    <PaymentMethod active={input.value === 'paypal'} type="button" onClick={() => input.onChange('paypal')}>
       <Image src="https://img.talkandroid.com/uploads/2017/04/paypal_logo_square.png" />
     </PaymentMethod>
 
@@ -279,7 +279,7 @@ class PurchaseTicket extends Component {
             ? (
               <div>
                 <p style={{ fontSize: '.9em' }}>
-                  Please transfer <strong>${this.state.result.price}</strong> to <strong>muniranians@mun.ca</strong> via Interac e-transfer and use the following information for the security question and the answer:
+                  Please transfer <strong>${this.state.result.price}</strong> to <strong>muniranians@gmail.com</strong> via Interac e-transfer and use the following information for the security question and the answer:
                 </p>
 
                 <InteracResult>
@@ -293,7 +293,7 @@ class PurchaseTicket extends Component {
                   </div>
                   <div>
                     <div>Recipient Email:</div>
-                    <div>muniranians@mun.ca</div>
+                    <div>muniranians@gmail.com</div>
                   </div>
                   <div>
                     <div>Amount $:</div>
@@ -321,7 +321,7 @@ class PurchaseTicket extends Component {
             : (
               <Form
                 initialValues={{
-                  paymentMethod: 'interac',
+                  paymentMethod: 'paypal',
                   email: auth && auth.email,
                   name: auth && auth.displayName,
                 }}
