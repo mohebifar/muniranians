@@ -54,6 +54,8 @@ class Html extends Component {
             dangerouslySetInnerHTML={{ __html: this.props.body }}
           />
           {this.props.postBodyComponents}
+          <script src="https://js.stripe.com/v3/"></script>
+
         </body>
       </html>
     )

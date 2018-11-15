@@ -8,6 +8,7 @@ import Modal from 'react-modal'
 import moment from 'moment'
 import Icon from 'react-fontawesome'
 import { firebaseConnect, dataToJS, pathToJS } from 'react-redux-firebase'
+import { StripeProvider, Elements } from 'react-stripe-elements'
 import _ from 'lodash'
 import 'whatwg-fetch'
 import load from 'little-loader'
@@ -164,15 +165,20 @@ class EventPage extends Component {
               minWidth: '40vw',
               overflowY: 'auto',
               maxHeight: '98vh',
+              backgroundColor: '#f6f9fc',
             },
           }}
         >
-          <PurchaseTicket
-            event={event}
-            close={this.closeModal}
-            eventId={eventId}
-            ticketId={this.state.ticketId}
-          />
+          <StripeProvider apiKey="pk_live_6Wco4RIoB7AYuK72WIfwU9tW">
+            <Elements>
+              <PurchaseTicket
+                event={event}
+                close={this.closeModal}
+                eventId={eventId}
+                ticketId={this.state.ticketId}
+              />
+            </Elements>
+          </StripeProvider>
         </Modal>
 
         <Helmet

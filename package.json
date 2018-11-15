@@ -32,6 +32,7 @@
     "react-modal": "^3.1.4",
     "react-redux": "^5.0.6",
     "react-redux-firebase": "^1.5.0",
+    "react-stripe-elements": "^2.0.1",
     "react-track": "^0.4.4",
     "react-youtube": "^7.5.0",
     "recompose": "^0.26.0",
