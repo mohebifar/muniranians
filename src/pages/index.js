@@ -39,19 +39,17 @@ const Jumbotron = styled.div`
 const testimonials = [
   {
     name: 'Mohamad',
-    position: 'Chemistry Student at MUN',
+    position: 'Scientific Computing Student at MUN',
     text:
-      'I have joined MUN Iranian not too long ago. Durning my membership, I was able to reunite with Persian culture and find great friends. They accommodate professional and favorable Persian events that I think is beyond the capacity of a volunteer-based student society. I am appreciative of the contributors\' endeavors, and I hope they always keep up the excellent work.',
-    photo:
-      'https://pbs.twimg.com/profile_images/850830563695046656/0j9F2FV0_400x400.jpg',
+      'I joined MUNIranians not too long ago. Durning my membership, I was able to reunite with Persian culture and find great friends. They accommodate professional and favorable Persian events that I think is beyond the capacity of a volunteer-based student society. I am appreciative of the contributors\' endeavors, and I hope they always keep up the excellent work.',
+    photo: require('../images/mohamad.jpg'),
   },
   {
     name: 'Hoda',
     position: 'Ph.D. Candidate Civil Engineering',
     text:
       'Doing Ph.D. in Memorial University was a great opportunity for me to flourish both in scientific research as well as other aspects of my life. Although being in a new environment far from my home country put me under a lot of pressure, having such a congenial atmosphere with lots of helping and Iranian friends ease every tension for me!',
-    photo:
-      'https://firebasestorage.googleapis.com/v0/b/muniranians-121f4.appspot.com/o/contests%2Fauthors%2Fhoda.jpg?alt=media&token=786852fc-871f-4a3a-a0ef-47bc7e1a9164',
+    photo: require('../images/hoda.jpg'),
   },
   {
     name: 'Mehran',
