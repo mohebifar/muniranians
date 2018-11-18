@@ -311,7 +311,10 @@ class PurchaseTicket extends Component {
                   }
                 </div>
                 <div>
-                  Your total is: <strong>${event.tickets[ticketId].price + (values.donation ? Number(values.donation) : 0)}</strong>
+                  Your total is: 
+                  <strong>
+                    ${event.tickets[ticketId].price + (values.donation ? Number(values.donation) : 0) + (auth ? -1 : 0)}
+                  </strong>
                 </div>
                 <ButtonWrapper>
                   <LaddaButton
