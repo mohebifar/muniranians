@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { branch, compose, withProps } from 'recompose'
@@ -53,7 +53,7 @@ const Description = styled.div`
   }
 `
 
-const Button = styled.button`
+const Button = styled.a`
   border: 1px solid #eee;
   background: #f9f9f9;
   padding: 10px;
@@ -64,66 +64,87 @@ const Button = styled.button`
   }
 `
 
-const handleDownload = event => {
-  const jsPDF = require('jspdf')
-  const canvas = document
-    .querySelector('.attendee-info canvas')
-    .toDataURL('image/jpeg', 1.0)
-  const pdf = new jsPDF()
-  pdf.text(`Thank you for buying a ticket for ${event.name}!`, 20, 20)
-  pdf.text(`See you in ${event.location.address}`, 20, 30)
-  pdf.addImage(canvas, 'JPEG', 70, 40)
-  pdf.save(`${event.name}-ticket.pdf`)
-}
+class AttendeePage extends Component {
+  state = {
+    downloadUrl: null,
+  }
 
-const AttendeePage = ({ attendeeId, attendee, event }) => (
-  <div>
-    <Jumbotron>
-      <h1>{event.name}</h1>
-      <h2 className="farsi">{event.faName}</h2>
-    </Jumbotron>
+  componentDidMount() {
+    // const jsPDF = require('jspdf')
+    // const canvas = document
+    //   .querySelector('.attendee-info canvas')
+    //   .toDataURL('image/jpeg', 1.0)
+    // const pdf = new jsPDF()
+    // pdf.text(`Thank you for buying a ticket for ${event.name}!`, 20, 20)
+    // pdf.text(`See you in ${event.location.address}`, 20, 30)
+    // pdf.addImage(canvas, 'JPEG', 70, 40)
+    // pdf.save(`${event.name}-ticket.pdf`)
+    this.props.firebase
+      .storage()
+      .refFromURL(`gs://muniranians-tickets/${this.props.attendeeId}.pdf`)
+      .getDownloadURL()
+      .then(downloadUrl => {
+        this.setState({ downloadUrl })
+      })
+  }
 
-    <Container>
-      <Flex flexDirection={['column', 'row', 'row']}>
-        <Box width={[1, 1 / 2, 15 / 24]} p={[2, 1, 1]}>
-          <Panel>
-            <Description className="attendee-info">
-              <div style={{ display: 'flex', flexDirection: 'row' }}>
-                <QRCode value={`attendee/${attendeeId}`} />
-                <div style={{ marginLeft: 20 }}>
-                  Please download your ticket and bring it with you to the
-                  event. You can either print out a paper copy OR simply have a
-                  copy of the file your on smartphone.
-                  <div style={{ paddingTop: 15 }}>
-                    <Button onClick={() => handleDownload(event)}>
-                      <Icon name="ticket" /> Download Your Ticket
-                    </Button>
+  render() {
+    const { attendeeId, event } = this.props
+
+    return (
+      <div>
+        <Jumbotron>
+          <h1>{event.name}</h1>
+          <h2 className="farsi">{event.faName}</h2>
+        </Jumbotron>
+    
+        <Container>
+          <Flex flexDirection={['column', 'row', 'row']}>
+            <Box width={[1, 1 / 2, 15 / 24]} p={[2, 1, 1]}>
+              <Panel>
+                <Description className="attendee-info">
+                  <div style={{ display: 'flex', flexDirection: 'row' }}>
+                    <QRCode value={`attendee/${attendeeId}`} />
+                    <div style={{ marginLeft: 20 }}>
+                      Please download your ticket and bring it with you to the
+                      event. You can either print out a paper copy OR simply have a
+                      copy of the file on your smartphone.
+                      <div style={{ paddingTop: 15 }}>
+                      {
+                        this.state.downloadUrl && (
+                          <Button target="_blank" href={this.state.downloadUrl}>
+                            <Icon name="ticket" /> Download Your Ticket
+                          </Button>
+                        )
+                      }
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            </Description>
-          </Panel>
-        </Box>
-        <Box width={[1, 1 / 2, 9 / 24]} p={[2, 1, 1]}>
-          <Panel>
-            <Address>{_.get(event, 'location.address', '')}</Address>
-            {_.has(event, 'location') ? (
-              <MapIFrame
-                src={`https://www.google.com/maps/embed/v1/view?zoom=17&center=${
-                  event.location.lat
-                },${event.location.lon}&key=${config.googleMaps.apiKey}`}
-                frameBorder="0"
-                allowFullScreen
-              />
-            ) : null}
-          </Panel>
-        </Box>
-      </Flex>
-    </Container>
-    <div style={{ marginBottom: 50 }} />
-  </div>
-)
-
+                </Description>
+              </Panel>
+            </Box>
+            <Box width={[1, 1 / 2, 9 / 24]} p={[2, 1, 1]}>
+              <Panel>
+                <Address>{_.get(event, 'location.address', '')}</Address>
+                {_.has(event, 'location') ? (
+                  <MapIFrame
+                    src={`https://www.google.com/maps/embed/v1/view?zoom=17&center=${
+                      event.location.lat
+                    },${event.location.lon}&key=${config.googleMaps.apiKey}`}
+                    frameBorder="0"
+                    allowFullScreen
+                  />
+                ) : null}
+              </Panel>
+            </Box>
+          </Flex>
+        </Container>
+        <div style={{ marginBottom: 50 }} />
+      </div>
+    )
+    
+  }
+}
 AttendeePage.propTypes = {
   attendeeId: PropTypes.string,
   attendee: PropTypes.object,
@@ -136,6 +157,9 @@ AttendeePage.propTypes = {
       address: PropTypes.string,
     }),
   }),
+  firebase: PropTypes.shape({
+    storage: PropTypes.func.isRequired,
+  }).isRequired,
 }
 
 export default compose(

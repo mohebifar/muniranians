@@ -8,69 +8,17 @@ import { connect } from 'react-redux'
 import { firebaseConnect, pathToJS } from 'react-redux-firebase'
 import 'whatwg-fetch'
 import Icon from 'react-fontawesome'
+import { FORM_ERROR } from 'final-form'
 
 import { CardElement, injectStripe } from 'react-stripe-elements'
 
 import config from '../../config'
 
-const required = value => (value ? undefined : 'Required')
+const required = value => (value ? undefined : 'This field is required')
 // eslint-disable-next-line
 const mustBeEmail = value => (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value) ? 'Must be a valid email address' : undefined)
+const mustBeMoneyAmount = value => !value ? undefined : (!/^[0-9]\d*(((,\d{3}){1})?(\.\d{0,2})?)$/.test(value.trim()) ? 'Must be a valid money amount like 10.00.' : undefined)
 const composeValidators = (...validators) => value => validators.reduce((error, validator) => error || validator(value), undefined)
-
-const Note = styled.div`
-  font-weight: 700;
-  font-size: 12px;
-  margin-bottom: 20px;
-`
-
-const InputWrapper = styled.div`
-  display: flex;
-  flex-flow: row nowrap;
-  line-height: 2em;
-  margin-bottom: 15px;
-  position: relative;
-
-  & > label {
-    color: #333;
-    width: 110px;
-    font-size: .9em;
-    line-height: 32px;
-  }
-  & > input,
-  & > select,
-  & > textarea {
-    flex: 1;
-    padding: 3px 5px;
-    font-size: .9em;
-    margin-left: 15px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-  }
-  & > input[type="checkbox"] {
-    margin-top: 7px;
-  }
-  & > div {
-    margin-left: 16px;
-    & > label {
-      display: block;
-      & > input {
-        margin-right: 3px;
-      }
-    }
-  }
-  & > span {
-    margin-left: 126px;
-    background: #de4e4e;
-    position: absolute;
-    color: white;
-    font-size: 0.7em;
-    padding: 2px 12px;
-    border-radius: 3px;
-    top: 100%;
-    z-index: 999;
-  }
-`
 
 const ButtonWrapper = styled.div`
   display: flex;
@@ -130,27 +78,27 @@ const Hint = styled.ul`
   }
 `
 
-const InteracResult = styled.div`
-  display: flex;
-  flex-direction: column;
-  font-size: .9em;
-  padding: 10px 0;
+// const InteracResult = styled.div`
+//   display: flex;
+//   flex-direction: column;
+//   font-size: .9em;
+//   padding: 10px 0;
 
-  > div {
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 5px;
+//   > div {
+//     display: flex;
+//     flex-direction: row;
+//     margin-bottom: 5px;
 
-    > :first-child {
-      flex-basis: 150px;
-      font-weight: bold;
-    }
+//     > :first-child {
+//       flex-basis: 150px;
+//       font-weight: bold;
+//     }
 
-    > :last-child {
-      flex-grow: 1;
-    }
-  }
-`
+//     > :last-child {
+//       flex-grow: 1;
+//     }
+//   }
+// `
 
 const StripeContainer = styled.div`
   label {
@@ -158,7 +106,7 @@ const StripeContainer = styled.div`
     font-weight: 300;
     letter-spacing: 0.025em;
   }
-  input,
+  input[type=text],
   .StripeElement {
     display: block;
     margin: 10px 0 20px 0;
@@ -172,28 +120,39 @@ const StripeContainer = styled.div`
     border-radius: 4px;
     background: white;
   }
-  input::placeholder {
+  input[type=text]::placeholder {
     color: #aab7c4;
   }
-  input:focus,
+  input[type=text]:focus,
   .StripeElement--focus {
     box-shadow: rgba(50, 50, 93, 0.109804) 0px 4px 6px, rgba(0, 0, 0, 0.0784314) 0px 1px 3px;
     -webkit-transition: all 150ms ease;
     transition: all 150ms ease;
   }
+  input[type=checkbox] {
+    margin-right: 15px;
+  }
   .StripeElement.IdealBankElement,
   .StripeElement.PaymentRequestButton {
     padding: 0;
   }
+  .error {
+    color: tomato;
+    font-size: .8em;
+    margin-bottom: 10px;
+  }
+  .donate {
+    margin-bottom: 10px;
+  }
 `
 
-// eslint-disable-next-line react/prop-types
+// eslint-disable-next-line react/prop-types, no-unused-vars
 const renderPaymentMethod = ({ input }) => (
   <div>
-    <PaymentMethod active={input.value === 'interac'} type="button" onClick={() => input.onChange('interac')}>
+    <PaymentMethod disabled active={input.value === 'interac'} type="button" onClick={() => input.onChange('interac')}>
       <Image src="http://www.rbcroyalbank.com/products/deposits/_assets-custom/images/interac-email-transfer-logo.png" />
     </PaymentMethod>
-    <PaymentMethod active={input.value === 'paypal'} type="button" onClick={() => input.onChange('paypal')}>
+    <PaymentMethod disabled active={input.value === 'paypal'} type="button" onClick={() => input.onChange('paypal')}>
       <Image src="https://img.talkandroid.com/uploads/2017/04/paypal_logo_square.png" />
     </PaymentMethod>
     <PaymentMethod active={input.value === 'stripe'} type="button" onClick={() => input.onChange('stripe')}>
@@ -201,89 +160,37 @@ const renderPaymentMethod = ({ input }) => (
     </PaymentMethod>
 
     <Hint>
-      <li>
+      <li>Your credit/debit card information is processed by Stripe. MUNIranians will have no access to these information.</li>
+      {/* <li>
         We are currently unable to process payments via PayPal due to some compliance issue.
       </li>
       <li>
         By choosing the Interac e-transfer method, you will be asked to transfer money via email, then the ticket will be sent to your email address within an hour.
-      </li>
+      </li> */}
     </Hint>
   </div>
 )
 
 // eslint-disable-next-line react/prop-types
-const renderTextInput = ({ input, label, meta }) => (
-  <div>
-    <label>{label}</label>
-    <input {...input} type="text" placeholder={label} />
-    {meta.error && meta.touched && <span>{meta.error}</span>}
+const renderTextInput = ({ input, label, placeholder, meta }) => (
+  <div className={meta.error && meta.touched ? 'hasError' : null}>
+    <label>
+      {label}
+      {meta.error && meta.touched && <span className="error"> - {meta.error}</span>}
+    </label>
+    <input {...input} type="text" placeholder={placeholder || label} />
   </div>
 )
 
-
-// // eslint-disable-next-line react/prop-types
-// const RegistrationForm = ({ handleSubmit, reset, submitting, pristine, values }) => (
-//   <form onSubmit={handleSubmit} style={{ margin: 0 }}>
-//     <Field name="name" label="Your name" validate={required}>
-//       {renderTextInput}
-//     </Field>
-//     <Field name="email" type="email" label="Email Address" validate={composeValidators(required, mustBeEmail)}>
-//       {renderTextInput}
-//     </Field>
-//     <div style={{ marginBottom: 15 }}>
-//       <p style={{ marginBottom: 15, fontSize: '.9em' }}>Choose a payment method:</p>
-
-//       <Field name="paymentMethod" validate={required}>
-//         {renderPaymentMethod}
-//       </Field>
-//     </div>
-//     <ButtonWrapper>
-//       <LaddaButton
-//         loading={submitting}
-//         type="submit"
-//         data-color="blue"
-//         data-size={L}
-//         data-style={ZOOM_OUT}
-//       >
-//         Proceed to Checkout
-//       </LaddaButton>
-//     </ButtonWrapper>
-//   </form>
-// )
-
-const StripeForm = ({ handleSubmit, stripe, submitting }) => {
-  return (
-    <form onSubmit={handleSubmit} style={{ margin: 0 }}>
-      <StripeContainer>
-        <Note>We never store your card information. All payments are processed via Stripe, a third-party payment solution.</Note>
-        <Field name="name" label="Your name" validate={required}>
-          {renderTextInput}
-        </Field>
-        <Field name="email" type="email" label="Email Address" validate={composeValidators(required, mustBeEmail)}>
-          {renderTextInput}
-        </Field>
-        <label>
-          Card Information
-        <CardElement />
-        </label>
-        <Field name="paymentMethod" validate={required}>
-          {renderPaymentMethod}
-        </Field>
-        <ButtonWrapper>
-          <LaddaButton
-            loading={submitting}
-            type="submit"
-            data-color="blue"
-            data-size={L}
-            data-style={ZOOM_OUT}
-          >
-            Pay
-      </LaddaButton>
-        </ButtonWrapper>
-      </StripeContainer>
-    </form>
-  )
-}
+// eslint-disable-next-line react/prop-types
+const renderCheckInput = ({ input, label }) => (
+  <div>
+    <label>
+      <input {...input} type="checkbox" />
+      {label}
+    </label>
+  </div>
+)
 
 class PurchaseTicket extends Component {
   static propTypes = {
@@ -292,6 +199,9 @@ class PurchaseTicket extends Component {
     ticketId: PropTypes.string.isRequired,
     auth: PropTypes.object,
     close: PropTypes.func,
+    stripe: PropTypes.shape({
+      createToken: PropTypes.func.isRequired,
+    }).isRequired,
   }
 
   state = {
@@ -311,8 +221,12 @@ class PurchaseTicket extends Component {
     this.setState({ buying: ticketId })
 
     if (data.paymentMethod === 'stripe') {
-      const stripeToken = await this.props.stripe.createToken()
-      data.token = stripeToken.token.id;
+      const stripeResponse = await this.props.stripe.createToken()
+      if (stripeResponse.error) {
+        return { [FORM_ERROR]: stripeResponse.error.message }
+      }
+
+      data.token = stripeResponse.token.id
     }
 
     try {
@@ -339,6 +253,7 @@ class PurchaseTicket extends Component {
 
       switch (data.paymentMethod) {
         case 'paypal':
+        case 'stripe':
           window.location.href = result.redirectTo
           break
         case 'interac':
@@ -353,7 +268,7 @@ class PurchaseTicket extends Component {
   }
 
   render() {
-    const { auth, close } = this.props
+    const { event, ticketId, auth, close } = this.props
 
     return (
       <div>
@@ -366,7 +281,52 @@ class PurchaseTicket extends Component {
             name: auth && auth.displayName,
           }}
           onSubmit={this.handleSubmit}
-          render={StripeForm}
+          render={({ handleSubmit, stripe, submitting, submitError, values }) => (
+            <form onSubmit={handleSubmit} style={{ margin: 0 }}>
+              <StripeContainer>
+                <Field name="name" label="Your name" validate={required}>
+                  {renderTextInput}
+                </Field>
+                <Field name="email" type="email" label="Email Address" validate={composeValidators(required, mustBeEmail)}>
+                  {renderTextInput}
+                </Field>
+                <label>
+                  Card Information
+                <CardElement />
+                </label>
+                {submitError && <div className="error">{submitError}</div>}
+                {/* <Field name="paymentMethod" validate={required}>
+                  {renderPaymentMethod}
+                </Field> */}
+                <div className="donate">
+                  <Field name="willDonate" type="check" label={<span>I would like to make an <strong>additional donation</strong> to MUNIranians.</span>}>
+                    {renderCheckInput}
+                  </Field>
+                  <div style={{ marginTop: 10 }} />
+                  {
+                    values.willDonate ? 
+                    <Field name="donation" type="text" label="Thanks for your donation! How much would you like to donate?" placeholder="e.g. 10" validate={values.willDonate && mustBeMoneyAmount}>
+                      {renderTextInput}
+                    </Field> : null
+                  }
+                </div>
+                <div>
+                  Your total is: <strong>${event.tickets[ticketId].price + (values.donation ? Number(values.donation) : 0)}</strong>
+                </div>
+                <ButtonWrapper>
+                  <LaddaButton
+                    loading={submitting}
+                    type="submit"
+                    data-color="blue"
+                    data-size={L}
+                    data-style={ZOOM_OUT}
+                  >
+                    Pay
+              </LaddaButton>
+                </ButtonWrapper>
+              </StripeContainer>
+            </form>
+          )}
         />
       </div>
     )

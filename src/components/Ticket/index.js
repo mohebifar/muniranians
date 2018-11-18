@@ -111,6 +111,9 @@ const Wrapper = styled.div`
     padding-right: 9px;
     font-size: 0.9em;
   }
+  .fa-subtitle {
+    text-align: left;
+  }
 `
 
 const Ticket = ({
@@ -137,7 +140,7 @@ const Ticket = ({
         <Flex flexDirection="row" className="deetz">
           <Flex flexDirection="column" className="event">
             <div>{subtitle}</div>
-            <div className="farsi">{faSubtitle}</div>
+            <div className="farsi fa-subtitle">{faSubtitle}</div>
           </Flex>
           <Flex flexDirection="column" className="price">
             <div className="label">{price === 0 ? null : 'Price'}</div>
