@@ -127,15 +127,7 @@ class AboutSection extends Component {
         </Box>
         <Box width={[1, 1, 2 / 3]} p={[3, 3, 3]}>
           <p>
-            <strong>MUNIranians</strong> is an independent, cultural and social
-            student club at Memorial University of Newfoundland which continues voluntarily since 2010. The mission of 
-            MUNIranians is to maintain and proclaim the Iranian culture within and
-            outside of the university boundaries. In doing so, it promotes a
-            proper channel for communication within the Iranian population,
-            proposes academic assistance to its members. Moreover, MUNIranians
-            is proud to organize social activities to develop an understanding
-            of Iranian society to unify and support the Iranian community within
-            its reach.
+          <strong>MUNIranians</strong>, established in 2010, is a volunteer-based independent student club at the Memorial University of Newfoundland (MUN). We made it our mission to maintain and proclaim the Iranian culture by promoting proper social mediums. Concurrently, we support our members by offering academic assistance. At MUNIranians we proudly organize social activities to unify and support the Iranian community while cultivating and celebrating Iranian culture with other citizenries.
           </p>
         </Box>
       </Wrapper>
