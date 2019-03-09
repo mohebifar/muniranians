@@ -210,6 +210,14 @@ class PurchaseTicket extends Component {
     result: {},
   }
 
+  calculatePrice(price, values, auth) {
+    return (price + (values.donation ? Number(values.donation) : 0)) * (this.isMunEmail(values.email) ? 0.85 : 1)
+  }
+
+  isMunEmail(email) {
+    return /@mun\.ca$/.test(email)
+  }
+
   handleSubmit = async (data) => {
     const { eventId, ticketId, auth } = this.props
     let token
@@ -270,6 +278,8 @@ class PurchaseTicket extends Component {
   render() {
     const { event, ticketId, auth, close } = this.props
 
+    const basePrice = event.tickets[ticketId].price
+
     return (
       <div>
         <button onClick={close} style={{ border: 'none' }}><Icon name="times" /></button>
@@ -281,55 +291,62 @@ class PurchaseTicket extends Component {
             name: auth && auth.displayName,
           }}
           onSubmit={this.handleSubmit}
-          render={({ handleSubmit, stripe, submitting, submitError, values }) => (
-            <form onSubmit={handleSubmit} style={{ margin: 0 }}>
-              <StripeContainer>
-                <Field name="name" label="Your name" validate={required}>
-                  {renderTextInput}
-                </Field>
-                <Field name="email" type="email" label="Email Address" validate={composeValidators(required, mustBeEmail)}>
-                  {renderTextInput}
-                </Field>
-                <label>
-                  Card Information
+          render={({ handleSubmit, stripe, submitting, submitError, values }) => {
+            const calculatedPrice = this.calculatePrice(basePrice, values, auth)
+            return (
+              <form onSubmit={handleSubmit} style={{ margin: 0 }}>
+                <StripeContainer>
+                  <Field name="name" label="Your name" validate={required}>
+                    {renderTextInput}
+                  </Field>
+                  <Field name="email" type="email" label="Email Address" validate={composeValidators(required, mustBeEmail)}>
+                    {renderTextInput}
+                  </Field>
+                  <label>
+                    Card Information
                 <CardElement />
-                </label>
-                {submitError && <div className="error">{submitError}</div>}
-                {/* <Field name="paymentMethod" validate={required}>
+                  </label>
+                  {submitError && <div className="error">{submitError}</div>}
+                  {/* <Field name="paymentMethod" validate={required}>
                   {renderPaymentMethod}
                 </Field> */}
-                <div className="donate">
-                  <Field name="willDonate" type="check" label={<span>I would like to make an <strong>additional donation</strong> to MUNIranians.</span>}>
-                    {renderCheckInput}
-                  </Field>
-                  <div style={{ marginTop: 10 }} />
-                  {
-                    values.willDonate ? 
-                    <Field name="donation" type="text" label="Thanks for your donation! How much would you like to donate?" placeholder="e.g. 10" validate={values.willDonate && mustBeMoneyAmount}>
-                      {renderTextInput}
-                    </Field> : null
-                  }
-                </div>
-                <div>
-                  Your total is: 
-                  <strong>
-                    ${event.tickets[ticketId].price + (values.donation ? Number(values.donation) : 0) + (auth ? -1 : 0)}
-                  </strong>
-                </div>
-                <ButtonWrapper>
-                  <LaddaButton
-                    loading={submitting}
-                    type="submit"
-                    data-color="blue"
-                    data-size={L}
-                    data-style={ZOOM_OUT}
-                  >
-                    Pay
+                  <div className="donate">
+                    <Field name="willDonate" type="check" label={<span>I would like to make an <strong>additional donation</strong> to MUNIranians.</span>}>
+                      {renderCheckInput}
+                    </Field>
+                    <div style={{ marginTop: 10 }} />
+                    {
+                      values.willDonate ?
+                        <Field name="donation" type="text" label="Thanks for your donation! How much would you like to donate?" placeholder="e.g. 10" validate={values.willDonate && mustBeMoneyAmount}>
+                          {renderTextInput}
+                        </Field> : null
+                    }
+                  </div>
+                  <div>
+                    Your total is:{' '}
+                    <strong>
+                      {calculatedPrice < basePrice ? <span>
+                        <small><s>${basePrice}</s></small>
+                        {' '}
+                         ${calculatedPrice}</span> : `$${calculatedPrice}`}
+                    </strong>
+                  </div>
+                  <ButtonWrapper>
+                    <LaddaButton
+                      loading={submitting}
+                      type="submit"
+                      data-color="blue"
+                      data-size={L}
+                      data-style={ZOOM_OUT}
+                    >
+                      Pay
               </LaddaButton>
-                </ButtonWrapper>
-              </StripeContainer>
-            </form>
-          )}
+                  </ButtonWrapper>
+                </StripeContainer>
+              </form>
+            )
+          }
+          }
         />
       </div>
     )
